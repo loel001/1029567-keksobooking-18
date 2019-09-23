@@ -16,6 +16,7 @@ var similarContainerElement = document.querySelector('.map__pins');
 var similarHousingTemplate = document.querySelector('#pin')
     .content
     .querySelector('.map__pin');
+var similarCardTemplate = document.querySelector('#card');
 
 var chooseHousing = function () {
   return {
@@ -42,8 +43,6 @@ var chooseHousing = function () {
   };
 };
 
-map.classList.remove('map--faded');
-
 var getTag = function (pin) {
   var housingElement = similarHousingTemplate.cloneNode(true);
   var photo = housingElement.querySelector('img[src]');
@@ -53,12 +52,27 @@ var getTag = function (pin) {
   return housingElement;
 };
 
-var getFragment = function () {
+var getObjects = function () {
+  var results = [];
+  for (var i = 0; i < NUMBER_OF_OBJECTS; i++) {
+    results.push(chooseHousing());
+  }
+  return results;
+};
+
+var getFragment = function (pins) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < NUMBER_OF_OBJECTS; i++) {
-    fragment.appendChild(getTag(chooseHousing()));
+    fragment.appendChild(getTag(pins[i]));
   }
   return fragment;
 };
 
-similarContainerElement.appendChild(getFragment());
+var getDescription = function (pin) {
+  var cardElement = similarCardTemplate.cloneNode(true);
+};
+
+map.classList.remove('map--faded');
+var objects = getObjects();
+similarContainerElement.appendChild(getFragment(objects));
+getDescription(objects[0]);
