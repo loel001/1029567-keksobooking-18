@@ -25,9 +25,9 @@ var randomLength = function (array) {
   return Math.floor(Math.random() * (array.length - 1));
 };
 
-var getRandomLength = function (array) {
+var getRandomLength = function (arr) {
   var res = [];
-  var copyOfArray = Array.from(array);
+  var copyOfArray = Array.from(arr);
   var max = randomLength(copyOfArray) + 1;
   for (var i = 0; i < max; i++) {
     var currentElem = randomLength(copyOfArray);
@@ -36,14 +36,6 @@ var getRandomLength = function (array) {
   }
   return res;
 };
-
-// PHOTO_ADDRESSES.forEach(function () {
-//   var res = [];
-//   res.push(PHOTO_ADDRESSES[RandomLength]);
-//   console.log(res);
-// });
-
-console.log(getRandomLength());
 
 var chooseHousing = function () {
   return {
@@ -59,9 +51,9 @@ var chooseHousing = function () {
       guests: 10,
       checkin: TIME_INTERVALS[Math.floor(Math.random() * TIME_INTERVALS.length)],
       checkout: TIME_INTERVALS[Math.floor(Math.random() * TIME_INTERVALS.length)],
-      features: FACILITIES[getRandomInt(0, FACILITIES.length - 1)],
+      features: getRandomLength(FACILITIES),
       description: '',
-      photos: PHOTO_ADDRESSES[Math.floor(Math.random() * PHOTO_ADDRESSES.length)]
+      photos: getRandomLength(PHOTO_ADDRESSES)
     },
     location: {
       x: getRandomInt(0 + PIN_X, widghtMap - PIN_X),
@@ -69,7 +61,6 @@ var chooseHousing = function () {
     }
   };
 };
-console.log (chooseHousing());
 
 var getTag = function (pin) {
   var housingElement = similarHousingTemplate.cloneNode(true);
@@ -96,6 +87,20 @@ var getFragment = function (pins) {
   return fragment;
 };
 
+var getPhotoList = function (array) {
+  var fragment = document.createDocumentFragment();
+  array.forEach(function (element) {
+    var img = document.createElement('img');
+    img.ClassName = 'popup__photo';
+    img.src = element;
+    img.width = 45;
+    img.height = 40;
+    img.alt = 'Фотография жилья';
+    fragment.appendChild(img);
+  });
+  return fragment;
+};
+
 var getDescription = function (pin) {
   var cardElement = similarCardTemplate.cloneNode(true);
   var hoisingTitle = cardElement.querySelector('.popup__title');
@@ -106,7 +111,7 @@ var getDescription = function (pin) {
   var housingTime = cardElement.querySelector('.popup__text--time');
   var housingFeatures = cardElement.querySelector('.popup__features');
   var housingDescription = cardElement.querySelector('.popup__description');
-  var housingPhoto = cardElement.querySelector('.popup__photos');
+  var housingPhoto = cardElement.querySelector('.popup__photo');
   var housingAvatar = cardElement.querySelector('.popup__avatar');
   var getHousingType = function (type) {
     var result = '';
@@ -124,17 +129,15 @@ var getDescription = function (pin) {
     }
     return result;
   };
-  console.log(cardElement);
   hoisingTitle.textContent = pin.offer.title;
   housingAddress.textContent = pin.offer.address;
   housingPrice.textContent = 4900 + '₽/ночь';
   housingType.textContent = getHousingType(pin.offer.type);
   housingCapacity.textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
   housingTime.textContent = 'заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
-  // ?
   housingFeatures.textContent = pin.offer.features;
   housingDescription.textContent = pin.offer.description;
-  housingPhoto.src = '=' + pin.offer.photos;
+  housingPhoto.replaceWith(getPhotoList(pin.offer.photos));
   housingAvatar.src = pin.author.avatar;
   return cardElement;
 };
