@@ -20,6 +20,25 @@ var similarCardTemplate = document.querySelector('#card')
     .content
     .querySelector('.map__card');
 var similarFiltersTemplate = document.querySelector('.map__filters-container');
+var formFieldsetHeader = document.querySelector('.ad-form-header');
+var formFieldsetElement = document.querySelectorAll('.ad-form__element');
+var formSelectElement = document.querySelectorAll('.map__filter');
+var formFieldsetFeatures = document.querySelector('.map__features');
+var mapPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var addressInput = document.getElementById('address');
+
+var addDisabledAttribute = function (array) {
+  array.forEach(function (element) {
+    element.setAttribute('disabled', 'disabled');
+  });
+};
+
+var removeDisabledAttribute = function (array) {
+  array.forEach(function (element) {
+    element.removeAttribute('disabled');
+  });
+};
 
 var randomLength = function (array) {
   return Math.floor(Math.random() * (array.length - 1));
@@ -142,7 +161,37 @@ var getDescription = function (pin) {
   return cardElement;
 };
 
-map.classList.remove('map--faded');
+var getTagAddress = function (element) {
+  var adFormDisabled = document.querySelector('.ad-form--disabled');
+  var pin = element.getBoundingClientRect();
+  var pointerHeight = 22;
+  var pinCenterX = 0;
+  var pinCenterY = 0;
+  if (adFormDisabled) {
+    pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
+    pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / 2 + pageYOffset);
+  } else {
+    pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
+    pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) + pointerHeight + pageYOffset);
+  }
+  return pinCenterX + ', ' + pinCenterY;
+};
+
+addressInput.setAttribute('value', getTagAddress(mapPin));
+addDisabledAttribute(formFieldsetElement);
+addDisabledAttribute([formFieldsetHeader]);
+addDisabledAttribute(formSelectElement);
+addDisabledAttribute([formFieldsetFeatures]);
 var objects = getObjects();
 similarContainerElement.appendChild(getFragment(objects));
 similarFiltersTemplate.before(getDescription(objects[0]));
+
+mapPin.addEventListener('click', function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  removeDisabledAttribute(formFieldsetElement);
+  removeDisabledAttribute([formFieldsetHeader]);
+  removeDisabledAttribute(formSelectElement);
+  removeDisabledAttribute([formFieldsetFeatures]);
+  addressInput.setAttribute('value', getTagAddress(mapPin));
+});
