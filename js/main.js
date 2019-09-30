@@ -26,12 +26,14 @@ var formSelectElement = document.querySelectorAll('.map__filter');
 var formFieldsetFeatures = document.querySelector('.map__features');
 var mapPin = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
-var addressInput = document.getElementById('address');
+var addressInput = document.querySelector('#address');
+var roomSelect = document.querySelector('#room_number');
+var capacitySelect = document.querySelector('#capacity');
 
 var addDisabledAttribute = function (array) {
-  array.forEach(function (element) {
-    element.setAttribute('disabled', 'disabled');
-  });
+  for (var i = 0; i < array.length; i++) {
+    array[i].setAttribute('disabled', '');
+  }
 };
 
 var removeDisabledAttribute = function (array) {
@@ -177,6 +179,79 @@ var getTagAddress = function (element) {
   return pinCenterX + ', ' + pinCenterY;
 };
 
+var updateSelect = function (rooms, guests) {
+  switch (rooms.value) {
+    case '1':
+      for (var i = 0; i < guests.options.length; i++) {
+        switch (guests.options[i].value) {
+          case '1':
+            guests.options[i].setAttribute('selected', '');
+            guests.options[i].removeAttribute('disabled');
+            break;
+          default:
+            guests.options[i].removeAttribute('selected');
+            guests.options[i].setAttribute('disabled', '');
+            break;
+        }
+      }
+      break;
+    case '2':
+      for (var j = 0; j < guests.options.length; j++) {
+        switch (guests.options[j].value) {
+          case '1':
+            guests.options[j].setAttribute('selected', '');
+            guests.options[j].removeAttribute('disabled');
+            break;
+          case '2':
+            guests.options[j].removeAttribute('selected');
+            guests.options[j].removeAttribute('disabled');
+            break;
+          default:
+            guests.options[j].removeAttribute('selected');
+            guests.options[j].setAttribute('disabled', '');
+            break;
+        }
+      }
+      break;
+    case '3':
+      for (var k = 0; k < guests.options.length; k++) {
+        switch (guests.options[k].value) {
+          case '1':
+            guests.options[k].setAttribute('selected', '');
+            guests.options[k].removeAttribute('disabled');
+            break;
+          case '2':
+            guests.options[k].removeAttribute('selected');
+            guests.options[k].removeAttribute('disabled');
+            break;
+          case '3':
+            guests.options[k].removeAttribute('selected');
+            guests.options[k].removeAttribute('disabled');
+            break;
+          default:
+            guests.options[k].removeAttribute('selected');
+            guests.options[k].setAttribute('disabled', '');
+            break;
+        }
+      }
+      break;
+    case '100':
+      for (var l = 0; l < guests.options.length; l++) {
+        switch (guests.options[l].value) {
+          case '0':
+            guests.options[l].setAttribute('selected', '');
+            guests.options[l].removeAttribute('disabled');
+            break;
+          default:
+            guests.options[l].removeAttribute('selected');
+            guests.options[l].setAttribute('disabled', '');
+            break;
+        }
+      }
+      break;
+  }
+};
+
 addressInput.setAttribute('value', getTagAddress(mapPin));
 addDisabledAttribute(formFieldsetElement);
 addDisabledAttribute([formFieldsetHeader]);
@@ -186,7 +261,7 @@ var objects = getObjects();
 similarContainerElement.appendChild(getFragment(objects));
 similarFiltersTemplate.before(getDescription(objects[0]));
 
-mapPin.addEventListener('click', function () {
+mapPin.addEventListener('mousedown', function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   removeDisabledAttribute(formFieldsetElement);
@@ -194,4 +269,23 @@ mapPin.addEventListener('click', function () {
   removeDisabledAttribute(formSelectElement);
   removeDisabledAttribute([formFieldsetFeatures]);
   addressInput.setAttribute('value', getTagAddress(mapPin));
+  updateSelect(roomSelect, capacitySelect);
+});
+
+mapPin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 13) {
+    evt.preventDefault();
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    removeDisabledAttribute(formFieldsetElement);
+    removeDisabledAttribute([formFieldsetHeader]);
+    removeDisabledAttribute(formSelectElement);
+    removeDisabledAttribute([formFieldsetFeatures]);
+    addressInput.setAttribute('value', getTagAddress(mapPin));
+    updateSelect(roomSelect, capacitySelect);
+  }
+});
+
+roomSelect.addEventListener('change', function () {
+  updateSelect(roomSelect, capacitySelect);
 });
