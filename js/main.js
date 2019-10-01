@@ -179,89 +179,48 @@ var getTagAddress = function (element) {
   return pinCenterX + ', ' + pinCenterY;
 };
 
+// Валидация для количества гостей взависимости от количества комнат
 var updateSelect = function (rooms, guests) {
+  for (var i = 0; i < guests.options.length; i++) {
+    guests.options[i].setAttribute('disabled', '');
+  }
   switch (rooms.value) {
     case '1':
-      for (var i = 0; i < guests.options.length; i++) {
-        switch (guests.options[i].value) {
-          case '1':
-            guests.options[i].setAttribute('selected', '');
-            guests.options[i].removeAttribute('disabled');
-            break;
-          default:
-            guests.options[i].removeAttribute('selected');
-            guests.options[i].setAttribute('disabled', '');
-            break;
-        }
-      }
+      guests.querySelector('[value="1"]').removeAttribute('disabled');
+      guests.querySelector('[value="1"]').setAttribute('selected', '');
+      guests.querySelector('[value="2"]').removeAttribute('selected');
+      guests.querySelector('[value="3"]').removeAttribute('selected');
+      guests.querySelector('[value="0"]').removeAttribute('selected');
       break;
     case '2':
-      for (var j = 0; j < guests.options.length; j++) {
-        switch (guests.options[j].value) {
-          case '1':
-            guests.options[j].setAttribute('selected', '');
-            guests.options[j].removeAttribute('disabled');
-            break;
-          case '2':
-            guests.options[j].removeAttribute('selected');
-            guests.options[j].removeAttribute('disabled');
-            break;
-          default:
-            guests.options[j].removeAttribute('selected');
-            guests.options[j].setAttribute('disabled', '');
-            break;
-        }
-      }
+      guests.querySelector('[value="1"]').removeAttribute('disabled');
+      guests.querySelector('[value="2"]').removeAttribute('disabled');
+      guests.querySelector('[value="2"]').setAttribute('selected', '');
+      guests.querySelector('[value="1"]').removeAttribute('selected');
+      guests.querySelector('[value="3"]').removeAttribute('selected');
+      guests.querySelector('[value="0"]').removeAttribute('selected');
       break;
     case '3':
-      for (var k = 0; k < guests.options.length; k++) {
-        switch (guests.options[k].value) {
-          case '1':
-            guests.options[k].setAttribute('selected', '');
-            guests.options[k].removeAttribute('disabled');
-            break;
-          case '2':
-            guests.options[k].removeAttribute('selected');
-            guests.options[k].removeAttribute('disabled');
-            break;
-          case '3':
-            guests.options[k].removeAttribute('selected');
-            guests.options[k].removeAttribute('disabled');
-            break;
-          default:
-            guests.options[k].removeAttribute('selected');
-            guests.options[k].setAttribute('disabled', '');
-            break;
-        }
-      }
+      guests.querySelector('[value="1"]').removeAttribute('disabled');
+      guests.querySelector('[value="2"]').removeAttribute('disabled');
+      guests.querySelector('[value="3"]').removeAttribute('disabled');
+      guests.querySelector('[value="3"]').setAttribute('selected', '');
+      guests.querySelector('[value="1"]').removeAttribute('selected');
+      guests.querySelector('[value="2"]').removeAttribute('selected');
+      guests.querySelector('[value="0"]').removeAttribute('selected');
       break;
     case '100':
-      for (var l = 0; l < guests.options.length; l++) {
-        switch (guests.options[l].value) {
-          case '0':
-            guests.options[l].setAttribute('selected', '');
-            guests.options[l].removeAttribute('disabled');
-            break;
-          default:
-            guests.options[l].removeAttribute('selected');
-            guests.options[l].setAttribute('disabled', '');
-            break;
-        }
-      }
+      guests.querySelector('[value="0"]').removeAttribute('disabled');
+      guests.querySelector('[value="0"]').setAttribute('selected', '');
+      guests.querySelector('[value="1"]').removeAttribute('selected');
+      guests.querySelector('[value="2"]').removeAttribute('selected');
+      guests.querySelector('[value="3"]').removeAttribute('selected');
       break;
   }
 };
 
-addressInput.setAttribute('value', getTagAddress(mapPin));
-addDisabledAttribute(formFieldsetElement);
-addDisabledAttribute([formFieldsetHeader]);
-addDisabledAttribute(formSelectElement);
-addDisabledAttribute([formFieldsetFeatures]);
-var objects = getObjects();
-similarContainerElement.appendChild(getFragment(objects));
-similarFiltersTemplate.before(getDescription(objects[0]));
-
-mapPin.addEventListener('mousedown', function () {
+// удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
+var addUponActivation = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   removeDisabledAttribute(formFieldsetElement);
@@ -270,22 +229,58 @@ mapPin.addEventListener('mousedown', function () {
   removeDisabledAttribute([formFieldsetFeatures]);
   addressInput.setAttribute('value', getTagAddress(mapPin));
   updateSelect(roomSelect, capacitySelect);
+  similarContainerElement.appendChild(getFragment(objects));
+};
+
+// Добавление disabled у форм
+var addBeforeActivation = function () {
+  addDisabledAttribute(formFieldsetElement);
+  addDisabledAttribute([formFieldsetHeader]);
+  addDisabledAttribute(formSelectElement);
+  addDisabledAttribute([formFieldsetFeatures]);
+};
+
+// Для открытия попапа по аватарки
+var callObject = function (obj, i) {
+  return function () {
+    var popup = document.querySelectorAll('.popup');
+    for (var j = 0; j < popup.length; j++) {
+      popup[j].remove();
+    }
+    similarFiltersTemplate.before(getDescription(obj[i]));
+    var buttonPopupClose = document.querySelector('.popup__close');
+    var popupAvatar = document.querySelector('.popup');
+    buttonPopupClose.addEventListener('click', function () {
+      popupAvatar.remove();
+    });
+  };
+};
+
+var openPopupAvatar = function (obj) {
+  var avatarPin = document.querySelectorAll('.map__pin');
+  for (var i = 1; i < avatarPin.length; i++) {
+    avatarPin[i].addEventListener('click', callObject(obj, i - 1));
+  }
+};
+
+addressInput.setAttribute('value', getTagAddress(mapPin));
+addBeforeActivation();
+var objects = getObjects();
+
+mapPin.addEventListener('mousedown', function () {
+  addUponActivation();
+  openPopupAvatar(objects);
 });
 
 mapPin.addEventListener('keydown', function (evt) {
   if (evt.keyCode === 13) {
     evt.preventDefault();
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    removeDisabledAttribute(formFieldsetElement);
-    removeDisabledAttribute([formFieldsetHeader]);
-    removeDisabledAttribute(formSelectElement);
-    removeDisabledAttribute([formFieldsetFeatures]);
-    addressInput.setAttribute('value', getTagAddress(mapPin));
-    updateSelect(roomSelect, capacitySelect);
+    addUponActivation();
+    openPopupAvatar(objects);
   }
 });
 
 roomSelect.addEventListener('change', function () {
   updateSelect(roomSelect, capacitySelect);
 });
+
