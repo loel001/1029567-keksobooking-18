@@ -20,6 +20,27 @@ var similarCardTemplate = document.querySelector('#card')
     .content
     .querySelector('.map__card');
 var similarFiltersTemplate = document.querySelector('.map__filters-container');
+var formFieldsetHeader = document.querySelector('.ad-form-header');
+var formFieldsetElement = document.querySelectorAll('.ad-form__element');
+var formSelectElement = document.querySelectorAll('.map__filter');
+var formFieldsetFeatures = document.querySelector('.map__features');
+var mapPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var addressInput = document.querySelector('#address');
+var roomSelect = document.querySelector('#room_number');
+var capacitySelect = document.querySelector('#capacity');
+
+var addDisabledAttribute = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    array[i].setAttribute('disabled', '');
+  }
+};
+
+var removeDisabledAttribute = function (array) {
+  array.forEach(function (element) {
+    element.removeAttribute('disabled');
+  });
+};
 
 var randomLength = function (array) {
   return Math.floor(Math.random() * (array.length - 1));
@@ -142,7 +163,124 @@ var getDescription = function (pin) {
   return cardElement;
 };
 
-map.classList.remove('map--faded');
+var getTagAddress = function (element) {
+  var adFormDisabled = document.querySelector('.ad-form--disabled');
+  var pin = element.getBoundingClientRect();
+  var pointerHeight = 22;
+  var pinCenterX = 0;
+  var pinCenterY = 0;
+  if (adFormDisabled) {
+    pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
+    pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / 2 + pageYOffset);
+  } else {
+    pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
+    pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) + pointerHeight + pageYOffset);
+  }
+  return pinCenterX + ', ' + pinCenterY;
+};
+
+// Валидация для количества гостей взависимости от количества комнат
+var updateSelect = function (rooms, guests) {
+  for (var i = 0; i < guests.options.length; i++) {
+    guests.options[i].setAttribute('disabled', '');
+  }
+  switch (rooms.value) {
+    case '1':
+      guests.querySelector('[value="1"]').removeAttribute('disabled');
+      guests.querySelector('[value="1"]').setAttribute('selected', '');
+      guests.querySelector('[value="2"]').removeAttribute('selected');
+      guests.querySelector('[value="3"]').removeAttribute('selected');
+      guests.querySelector('[value="0"]').removeAttribute('selected');
+      break;
+    case '2':
+      guests.querySelector('[value="1"]').removeAttribute('disabled');
+      guests.querySelector('[value="2"]').removeAttribute('disabled');
+      guests.querySelector('[value="2"]').setAttribute('selected', '');
+      guests.querySelector('[value="1"]').removeAttribute('selected');
+      guests.querySelector('[value="3"]').removeAttribute('selected');
+      guests.querySelector('[value="0"]').removeAttribute('selected');
+      break;
+    case '3':
+      guests.querySelector('[value="1"]').removeAttribute('disabled');
+      guests.querySelector('[value="2"]').removeAttribute('disabled');
+      guests.querySelector('[value="3"]').removeAttribute('disabled');
+      guests.querySelector('[value="3"]').setAttribute('selected', '');
+      guests.querySelector('[value="1"]').removeAttribute('selected');
+      guests.querySelector('[value="2"]').removeAttribute('selected');
+      guests.querySelector('[value="0"]').removeAttribute('selected');
+      break;
+    case '100':
+      guests.querySelector('[value="0"]').removeAttribute('disabled');
+      guests.querySelector('[value="0"]').setAttribute('selected', '');
+      guests.querySelector('[value="1"]').removeAttribute('selected');
+      guests.querySelector('[value="2"]').removeAttribute('selected');
+      guests.querySelector('[value="3"]').removeAttribute('selected');
+      break;
+  }
+};
+
+// удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
+var addUponActivation = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  removeDisabledAttribute(formFieldsetElement);
+  removeDisabledAttribute([formFieldsetHeader]);
+  removeDisabledAttribute(formSelectElement);
+  removeDisabledAttribute([formFieldsetFeatures]);
+  addressInput.setAttribute('value', getTagAddress(mapPin));
+  updateSelect(roomSelect, capacitySelect);
+  similarContainerElement.appendChild(getFragment(objects));
+};
+
+// Добавление disabled у форм
+var addBeforeActivation = function () {
+  addDisabledAttribute(formFieldsetElement);
+  addDisabledAttribute([formFieldsetHeader]);
+  addDisabledAttribute(formSelectElement);
+  addDisabledAttribute([formFieldsetFeatures]);
+};
+
+// Для открытия попапа по аватарки
+var callObject = function (obj, i) {
+  return function () {
+    var popup = document.querySelectorAll('.popup');
+    for (var j = 0; j < popup.length; j++) {
+      popup[j].remove();
+    }
+    similarFiltersTemplate.before(getDescription(obj[i]));
+    var buttonPopupClose = document.querySelector('.popup__close');
+    var popupAvatar = document.querySelector('.popup');
+    buttonPopupClose.addEventListener('click', function () {
+      popupAvatar.remove();
+    });
+  };
+};
+
+var openPopupAvatar = function (obj) {
+  var avatarPin = document.querySelectorAll('.map__pin');
+  for (var i = 1; i < avatarPin.length; i++) {
+    avatarPin[i].addEventListener('click', callObject(obj, i - 1));
+  }
+};
+
+addressInput.setAttribute('value', getTagAddress(mapPin));
+addBeforeActivation();
 var objects = getObjects();
-similarContainerElement.appendChild(getFragment(objects));
-similarFiltersTemplate.before(getDescription(objects[0]));
+
+mapPin.addEventListener('mousedown', function () {
+  addUponActivation();
+  openPopupAvatar(objects);
+});
+
+mapPin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 13) {
+    evt.preventDefault();
+    addUponActivation();
+    openPopupAvatar(objects);
+  }
+});
+
+roomSelect.addEventListener('change', function () {
+  updateSelect(roomSelect, capacitySelect);
+});
+
