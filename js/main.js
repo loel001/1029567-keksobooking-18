@@ -20,14 +20,18 @@ var similarCardTemplate = document.querySelector('#card')
     .querySelector('.map__card');
 var similarFiltersTemplate = document.querySelector('.map__filters-container');
 var formFieldsetHeader = document.querySelector('.ad-form-header');
-var formFieldsetElement = document.querySelectorAll('.ad-form__element');
-var formSelectElement = document.querySelectorAll('.map__filter');
+var formFieldsetElements = document.querySelectorAll('.ad-form__element');
+var formSelectElements = document.querySelectorAll('.map__filter');
 var formFieldsetFeatures = document.querySelector('.map__features');
 var mapPin = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var addressInput = document.querySelector('#address');
 var roomSelect = document.querySelector('#room_number');
 var capacitySelect = document.querySelector('#capacity');
+var typeНousingSelect = document.querySelector('#type');
+var priceНousingInput = document.querySelector('#price');
+var timeInSelect = document.querySelector('#timein');
+var timeOutSelect = document.querySelector('#timeout');
 
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -223,34 +227,83 @@ var updateSelect = function (rooms, guests) {
 };
 
 // Валидация для цены за ночь взависимости от типа жилья
+var updatePrice = function (type, price) {
+  switch (type.value) {
+    case 'bungalo':
+      price.placeholder = '0';
+      price.setAttribute('min', 0);
+      break;
+    case 'flat':
+      price.placeholder = '1000';
+      price.setAttribute('min', 1000);
+      break;
+    case 'house':
+      price.placeholder = '5000';
+      price.setAttribute('min', 5000);
+      break;
+    case 'palace':
+      price.placeholder = '10000';
+      price.setAttribute('min', 10000);
+      break;
+  }
+};
+
+// Валидация время выезда взависимости от времени заезда
+var updateTimeOut = function (timein, timeout) {
+  for (var i = 0; i < timeout.options.length; i++) {
+    timeout.options[i].setAttribute('disabled', '');
+  }
+  switch (timein.value) {
+    case '12:00':
+      timeout.querySelector('[value="12:00"]').removeAttribute('disabled');
+      timeout.querySelector('[value="12:00"]').setAttribute('selected', '');
+      timeout.querySelector('[value="13:00"]').removeAttribute('selected');
+      timeout.querySelector('[value="14:00"]').removeAttribute('selected');
+      break;
+    case '13:00':
+      timeout.querySelector('[value="13:00"]').removeAttribute('disabled');
+      timeout.querySelector('[value="13:00"]').setAttribute('selected', '');
+      timeout.querySelector('[value="12:00"]').removeAttribute('selected');
+      timeout.querySelector('[value="14:00"]').removeAttribute('selected');
+      break;
+    case '14:00':
+      timeout.querySelector('[value="14:00"]').removeAttribute('disabled');
+      timeout.querySelector('[value="14:00"]').setAttribute('selected', '');
+      timeout.querySelector('[value="12:00"]').removeAttribute('selected');
+      timeout.querySelector('[value="13:00"]').removeAttribute('selected');
+      break;
+  }
+};
 
 // удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
 var addUponActivation = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  removeDisabledAttribute(formFieldsetElement);
+  removeDisabledAttribute(formFieldsetElements);
   removeDisabledAttribute([formFieldsetHeader]);
-  removeDisabledAttribute(formSelectElement);
+  removeDisabledAttribute(formSelectElements);
   removeDisabledAttribute([formFieldsetFeatures]);
   addressInput.setAttribute('value', getTagAddress(mapPin));
   updateSelect(roomSelect, capacitySelect);
+  updatePrice(typeНousingSelect, priceНousingInput);
+  updateTimeOut(timeInSelect, timeOutSelect);
   similarContainerElement.appendChild(getFragment(objects));
 };
 
 // Добавление disabled у форм
 var addBeforeActivation = function () {
-  addDisabledAttribute(formFieldsetElement);
+  addDisabledAttribute(formFieldsetElements);
   addDisabledAttribute([formFieldsetHeader]);
-  addDisabledAttribute(formSelectElement);
+  addDisabledAttribute(formSelectElements);
   addDisabledAttribute([formFieldsetFeatures]);
 };
 
 // Для открытия и закрытия попапа по клику на аватарку
 var callObject = function (obj, i) {
   return function () {
-    var popup = document.querySelectorAll('.popup:not(.map__pin--main)');
-    for (var j = 0; j < popup.length; j++) {
-      popup[j].remove();
+    var popups = document.querySelectorAll('.popup:not(.map__pin--main)');
+    for (var j = 0; j < popups.length; j++) {
+      popups[j].remove();
     }
     similarFiltersTemplate.before(getDescription(obj[i]));
     var buttonPopupClose = document.querySelector('.popup__close');
@@ -270,9 +323,9 @@ var callObject = function (obj, i) {
 };
 
 var openPopupAvatar = function (obj) {
-  var avatarPin = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-  for (var i = 0; i < avatarPin.length; i++) {
-    avatarPin[i].addEventListener('click', callObject(obj, i));
+  var avatarPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < avatarPins.length; i++) {
+    avatarPins[i].addEventListener('click', callObject(obj, i));
   }
 };
 
@@ -281,19 +334,33 @@ addBeforeActivation();
 var objects = getObjects();
 
 mapPin.addEventListener('mousedown', function () {
-  addUponActivation();
-  openPopupAvatar(objects);
-});
-
-mapPin.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    evt.preventDefault();
+  var avatars = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  if (avatars.length === 0) {
     addUponActivation();
     openPopupAvatar(objects);
   }
 });
 
+mapPin.addEventListener('keydown', function (evt) {
+  var avatars = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  if (evt.keyCode === ENTER_KEYCODE) {
+    if (avatars.length === 0) {
+      evt.preventDefault();
+      addUponActivation();
+      openPopupAvatar(objects);
+    }
+  }
+});
+
 roomSelect.addEventListener('change', function () {
   updateSelect(roomSelect, capacitySelect);
+});
+
+typeНousingSelect.addEventListener('change', function () {
+  updatePrice(typeНousingSelect, priceНousingInput);
+});
+
+timeInSelect.addEventListener('change', function () {
+  updateTimeOut(timeInSelect, timeOutSelect);
 });
 
