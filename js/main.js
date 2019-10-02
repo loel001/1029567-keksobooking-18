@@ -1,8 +1,7 @@
 'use strict';
 
-var getRandomInt = function (min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-};
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 var HOUSING_TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var TIME_INTERVALS = ['12:00', '13:00', '14:00'];
 var FACILITIES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -15,7 +14,7 @@ var widghtMap = map.offsetWidth;
 var similarContainerElement = document.querySelector('.map__pins');
 var similarHousingTemplate = document.querySelector('#pin')
     .content
-    .querySelector('.map__pin');
+    .querySelector('.map__pin:not(.map__pin--main)');
 var similarCardTemplate = document.querySelector('#card')
     .content
     .querySelector('.map__card');
@@ -29,6 +28,10 @@ var adForm = document.querySelector('.ad-form');
 var addressInput = document.querySelector('#address');
 var roomSelect = document.querySelector('#room_number');
 var capacitySelect = document.querySelector('#capacity');
+
+var getRandomInt = function (min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
 
 var addDisabledAttribute = function (array) {
   for (var i = 0; i < array.length; i++) {
@@ -219,6 +222,8 @@ var updateSelect = function (rooms, guests) {
   }
 };
 
+// Валидация для цены за ночь взависимости от типа жилья
+
 // удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
 var addUponActivation = function () {
   map.classList.remove('map--faded');
@@ -240,10 +245,10 @@ var addBeforeActivation = function () {
   addDisabledAttribute([formFieldsetFeatures]);
 };
 
-// Для открытия попапа по аватарки
+// Для открытия и закрытия попапа по клику на аватарку
 var callObject = function (obj, i) {
   return function () {
-    var popup = document.querySelectorAll('.popup');
+    var popup = document.querySelectorAll('.popup:not(.map__pin--main)');
     for (var j = 0; j < popup.length; j++) {
       popup[j].remove();
     }
@@ -253,13 +258,21 @@ var callObject = function (obj, i) {
     buttonPopupClose.addEventListener('click', function () {
       popupAvatar.remove();
     });
+    window.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        if (popupAvatar) {
+          evt.preventDefault();
+          popupAvatar.remove();
+        }
+      }
+    });
   };
 };
 
 var openPopupAvatar = function (obj) {
-  var avatarPin = document.querySelectorAll('.map__pin');
-  for (var i = 1; i < avatarPin.length; i++) {
-    avatarPin[i].addEventListener('click', callObject(obj, i - 1));
+  var avatarPin = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < avatarPin.length; i++) {
+    avatarPin[i].addEventListener('click', callObject(obj, i));
   }
 };
 
@@ -273,7 +286,7 @@ mapPin.addEventListener('mousedown', function () {
 });
 
 mapPin.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === 13) {
+  if (evt.keyCode === ENTER_KEYCODE) {
     evt.preventDefault();
     addUponActivation();
     openPopupAvatar(objects);
