@@ -160,6 +160,7 @@
     ESC_KEYCODE: ESC_KEYCODE,
     ENTER_KEYCODE: ENTER_KEYCODE,
     map: map,
+    widghtMap: widghtMap,
     objects: objects,
     getFragment: function (pins) {
       var fragment = document.createDocumentFragment();
@@ -187,9 +188,12 @@
         pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
         pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) + pointerHeight + pageYOffset);
       }
-      return pinCenterX + ', ' + pinCenterY;
-    }
+      return {
+        x: pinCenterX,
+        y: pinCenterY
+      };
+    },
   };
-
-  window.util.addressInput.setAttribute('value', window.cards.getTagAddress(window.util.mapPin));
+  var coords = window.cards.getTagAddress(window.util.mapPin);
+  window.util.addressInput.setAttribute('value', coords.x + ', ' + coords.y);
 })();
