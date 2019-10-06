@@ -33,13 +33,19 @@
       var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
         dragged = true;
-        if ((moveEvt.clientY >= 130 && moveEvt.clientY <= 630) && (moveEvt.clientX >= 31 && moveEvt.clientX <= window.cards.widghtMap - 31)) {
-          var newCoordsY = startCoords.y - (startCoords.y - moveEvt.clientY);
-          var newCoordsX = startCoords.x - (startCoords.x - moveEvt.clientX);
-          window.util.mapPin.style.top = newCoordsY + 'px';
-          window.util.mapPin.style.left = newCoordsX + 'px';
-          window.util.addressInput.setAttribute('value', newCoordsX + ', ' + newCoordsY);
+        var newCoordsY = startCoords.y - moveEvt.clientY;
+        var newCoordsX = startCoords.x - moveEvt.clientX;
+        startCoords.x = moveEvt.clientX;
+        startCoords.y = moveEvt.clientY;
+        window.util.mapPin.style.top = (window.util.mapPin.offsetTop - newCoordsY) + 'px';
+        window.util.mapPin.style.left = (window.util.mapPin.offsetLeft - newCoordsX) + 'px';
+        if ((window.util.mapPin.offsetTop + 42) < 130 || (window.util.mapPin.offsetTop + 42) > 630) {
+          window.util.mapPin.style.top = (window.util.mapPin.offsetTop + newCoordsY) + 'px';
         }
+        if ((window.util.mapPin.offsetLeft + 31) < 0 || (window.util.mapPin.offsetLeft + 31) > window.cards.widghtMap) {
+          window.util.mapPin.style.left = (window.util.mapPin.offsetLeft + newCoordsX) + 'px';
+        }
+        window.util.addressInput.setAttribute('value', newCoordsX + ', ' + newCoordsY);
       };
       var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
