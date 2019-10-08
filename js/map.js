@@ -48,7 +48,7 @@
         var shiftCoordsX = startCoords.x - moveEvt.clientX;
         var newCoordsY = mapPin.offsetTop - shiftCoordsY + pageYOffset;
         var newCoordsX = mapPin.offsetLeft - shiftCoordsX + pageXOffset;
-        if ((newCoordsY >= MIN_MAP_Y && newCoordsY <= MAX_MAP_Y) &&
+        if (((newCoordsY + MAIN_PIN_Y) >= MIN_MAP_Y && (newCoordsY + MAIN_PIN_Y) <= MAX_MAP_Y) &&
             (newCoordsX >= -MAIN_PIN_X && newCoordsX <= widghtMap - MAIN_PIN_X)) {
           startCoords.x = moveEvt.clientX + pageXOffset;
           startCoords.y = moveEvt.clientY + pageYOffset;
@@ -56,15 +56,15 @@
           mapPin.style.left = newCoordsX + 'px';
           addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
-        if ((newCoordsY < MIN_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
-          startCoords.y = MIN_MAP_Y + MAIN_PIN_Y;
-          mapPin.style.top = MIN_MAP_Y + 'px';
-          addressInput.setAttribute('value', startCoords.x + ', ' + (MIN_MAP_Y + MAIN_PIN_Y));
+        if (((newCoordsY + MAIN_PIN_Y) < MIN_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
+          startCoords.y = MIN_MAP_Y - MAIN_PIN_Y;
+          mapPin.style.top = (MIN_MAP_Y - MAIN_PIN_Y) + 'px';
+          addressInput.setAttribute('value', startCoords.x + ', ' + MIN_MAP_Y);
         }
-        if ((newCoordsY > MAX_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
-          startCoords.y = MAX_MAP_Y + MAIN_PIN_Y;
-          mapPin.style.top = MAX_MAP_Y + 'px';
-          addressInput.setAttribute('value', startCoords.x + ', ' + (MAX_MAP_Y + MAIN_PIN_Y));
+        if (((newCoordsY + MAIN_PIN_Y) > MAX_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
+          startCoords.y = MAX_MAP_Y - MAIN_PIN_Y;
+          mapPin.style.top = (MAX_MAP_Y - MAIN_PIN_Y) + 'px';
+          addressInput.setAttribute('value', startCoords.x + ', ' + MAX_MAP_Y);
         }
         if ((newCoordsX < -MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
           startCoords.x = (window.innerWidth - widghtMap) / half;

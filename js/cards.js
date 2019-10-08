@@ -53,7 +53,7 @@
       },
       location: {
         x: window.util.getRandomInt(0 + PIN_X, widghtMap - PIN_X),
-        y: window.util.getRandomInt(130 + PIN_Y, 630)
+        y: window.util.getRandomInt(130 - PIN_Y, 630 - PIN_Y)
       }
     };
   };
