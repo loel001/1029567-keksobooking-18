@@ -178,7 +178,7 @@
     getTagAddress: function (element) {
       var adFormDisabled = document.querySelector('.ad-form--disabled');
       var pin = element.getBoundingClientRect();
-      var pointerHeight = 22;
+      var pointerHeight = 16;
       var pinCenterX = 0;
       var pinCenterY = 0;
       if (adFormDisabled) {
