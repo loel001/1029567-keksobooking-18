@@ -53,7 +53,7 @@
       },
       location: {
         x: window.util.getRandomInt(0 + PIN_X, widghtMap - PIN_X),
-        y: window.util.getRandomInt(130 + PIN_Y, 630)
+        y: window.util.getRandomInt(130 - PIN_Y, 630 - PIN_Y)
       }
     };
   };
@@ -160,6 +160,7 @@
     ESC_KEYCODE: ESC_KEYCODE,
     ENTER_KEYCODE: ENTER_KEYCODE,
     map: map,
+    widghtMap: widghtMap,
     objects: objects,
     getFragment: function (pins) {
       var fragment = document.createDocumentFragment();
@@ -177,7 +178,7 @@
     getTagAddress: function (element) {
       var adFormDisabled = document.querySelector('.ad-form--disabled');
       var pin = element.getBoundingClientRect();
-      var pointerHeight = 22;
+      var pointerHeight = 16;
       var pinCenterX = 0;
       var pinCenterY = 0;
       if (adFormDisabled) {
@@ -187,9 +188,12 @@
         pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
         pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) + pointerHeight + pageYOffset);
       }
-      return pinCenterX + ', ' + pinCenterY;
-    }
+      return {
+        x: pinCenterX,
+        y: pinCenterY
+      };
+    },
   };
-
-  window.util.addressInput.setAttribute('value', window.cards.getTagAddress(window.util.mapPin));
+  var coords = window.cards.getTagAddress(window.util.mapPin);
+  window.util.addressInput.setAttribute('value', coords.x + ', ' + coords.y);
 })();
