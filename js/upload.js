@@ -1,7 +1,7 @@
 'use strict';
 // Загрузка данных с сервера
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/data';
+  var URL = 'https://js.dump.academy/keksobooking';
 
   window.upload = function (data, onSuccess) {
     var xhr = new XMLHttpRequest();
