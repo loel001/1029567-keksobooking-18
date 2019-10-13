@@ -105,4 +105,8 @@
       }
     }
   });
+
+  window.map = {
+    adForm: adForm
+  };
 })();
