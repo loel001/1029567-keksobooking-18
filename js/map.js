@@ -42,7 +42,7 @@
         moveEvt.preventDefault();
         dragged = true;
         var bordersX = ['-' + MAIN_PIN_X + 'px', (widghtMap - MAIN_PIN_X) + 'px'];
-        var bordersY = [MIN_MAP_Y + 'px', MAX_MAP_Y + 'px'];
+        var bordersY = [(MIN_MAP_Y - MAIN_PIN_Y) + 'px', (MAX_MAP_Y - MAIN_PIN_Y) + 'px'];
         var shiftCoordsY = startCoords.y - moveEvt.clientY;
         var shiftCoordsX = startCoords.x - moveEvt.clientX;
         var newCoordsY = mapPin.offsetTop - shiftCoordsY + pageYOffset;
@@ -58,22 +58,22 @@
         if (((newCoordsY + MAIN_PIN_Y) < MIN_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
           startCoords.y = MIN_MAP_Y - MAIN_PIN_Y / half;
           mapPin.style.top = (MIN_MAP_Y - MAIN_PIN_Y) + 'px';
-          addressInput.setAttribute('value', startCoords.x + ', ' + MIN_MAP_Y);
+          addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + MIN_MAP_Y);
         }
         if (((newCoordsY + MAIN_PIN_Y) > MAX_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
           startCoords.y = MAX_MAP_Y - MAIN_PIN_Y / half;
           mapPin.style.top = (MAX_MAP_Y - MAIN_PIN_Y) + 'px';
-          addressInput.setAttribute('value', startCoords.x + ', ' + MAX_MAP_Y);
+          addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + MAX_MAP_Y);
         }
         if ((newCoordsX < -MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
           startCoords.x = (window.innerWidth - widghtMap) / half;
           mapPin.style.left = -MAIN_PIN_X + 'px';
-          addressInput.setAttribute('value', 0 + ', ' + startCoords.y);
+          addressInput.setAttribute('value', 0 + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
         if ((newCoordsX > widghtMap - MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
           startCoords.x = (window.innerWidth - widghtMap) / half + widghtMap;
           mapPin.style.left = (widghtMap - MAIN_PIN_X) + 'px';
-          addressInput.setAttribute('value', widghtMap + ', ' + startCoords.y);
+          addressInput.setAttribute('value', widghtMap + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
       };
     }

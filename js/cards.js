@@ -127,7 +127,9 @@
       var popupAvatar = document.querySelector('.popup');
       for (var i = 0; i < avatarPins.length; i++) {
         avatarPins[i].parentNode.removeChild(avatarPins[i]);
-        popupAvatar.remove();
+        if (popupAvatar) {
+          popupAvatar.remove();
+        }
       }
     },
     getTagAddress: function (element) {
