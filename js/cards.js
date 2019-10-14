@@ -122,17 +122,28 @@
         avatarPins[i].addEventListener('click', callObject(obj, i));
       }
     },
+    deletePopupAvatar: function () {
+      var avatarPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+      var popupAvatar = document.querySelector('.popup');
+      for (var i = 0; i < avatarPins.length; i++) {
+        avatarPins[i].parentNode.removeChild(avatarPins[i]);
+        popupAvatar.remove();
+      }
+    },
     getTagAddress: function (element) {
+      var half = 2;
       var adFormDisabled = document.querySelector('.ad-form--disabled');
       var pin = element.getBoundingClientRect();
       var pointerHeight = 16;
       var pinCenterX = 0;
       var pinCenterY = 0;
+      var widtRunner = 12;
+      var offsetPin = (window.innerWidth - widtRunner - widghtMap) / half;
       if (adFormDisabled) {
-        pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
-        pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / 2 + pageYOffset);
+        pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / half + pageXOffset - offsetPin);
+        pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / half + pageYOffset);
       } else {
-        pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
+        pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / half + pageXOffset - offsetPin);
         pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) + pointerHeight + pageYOffset);
       }
       return {
@@ -140,7 +151,20 @@
         y: pinCenterY
       };
     },
+    getPinAddress: function (element) {
+      var pin = element.getBoundingClientRect();
+      var pinCenterX = 0;
+      var pinCenterY = 0;
+      var half = 2;
+      pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / half + pageXOffset);
+      pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / half + pageYOffset);
+      return {
+        x: pinCenterX,
+        y: pinCenterY
+      };
+    },
   };
+
   var coords = window.cards.getTagAddress(window.util.mapPin);
   window.util.addressInput.setAttribute('value', coords.x + ', ' + coords.y);
 

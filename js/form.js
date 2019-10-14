@@ -12,6 +12,7 @@
   var priceНousingInput = document.querySelector('#price');
   var timeInSelect = document.querySelector('#timein');
   var timeOutSelect = document.querySelector('#timeout');
+  var adForm = document.querySelector('.ad-form');
 
   window.form = {
     formFieldsetHeader: formFieldsetHeader,
@@ -24,6 +25,7 @@
     priceНousingInput: priceНousingInput,
     timeInSelect: timeInSelect,
     timeOutSelect: timeOutSelect,
+    adForm: adForm,
     addDisabledAttribute: function (array) {
       for (var i = 0; i < array.length; i++) {
         array[i].setAttribute('disabled', '');
@@ -140,5 +142,14 @@
 
   timeInSelect.addEventListener('change', function () {
     window.form.updateTimeOut(timeInSelect, timeOutSelect);
+  });
+
+  adForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(adForm), function () {
+      adForm.classList.add('ad-form--disabled');
+      window.cards.map.classList.add('map--faded');
+      window.cards.deletePopupAvatar();
+    });
+    evt.preventDefault();
   });
 })();
