@@ -128,6 +128,14 @@
           timeout.querySelector('[value="13:00"]').removeAttribute('selected');
           break;
       }
+    },
+    returnInactiveState: function () {
+      adForm.classList.add('ad-form--disabled');
+      window.cards.map.classList.add('map--faded');
+      window.cards.deletePopupAvatar();
+      adForm.reset();
+      window.util.mapPin.style = 'left: ' + 570 + 'px; top: ' + 375 + 'px;';
+      window.util.addressInput.setAttribute('value', 600 + ', ' + 407);
     }
   };
   window.form.addBeforeActivation();
@@ -144,11 +152,21 @@
     window.form.updateTimeOut(timeInSelect, timeOutSelect);
   });
 
+  var similarFormError = document.querySelector('#success')
+      .content
+      .querySelector('.success');
+
+  var getSuccessMessage = function () {
+    var formError = similarFormError.cloneNode(true);
+    var messageError = formError.querySelector('.success__message');
+    messageError.textContent = 'Ваше объявление\nуспешно размещено!';
+    return formError;
+  };
+
   adForm.addEventListener('submit', function (evt) {
     window.upload(new FormData(adForm), function () {
-      adForm.classList.add('ad-form--disabled');
-      window.cards.map.classList.add('map--faded');
-      window.cards.deletePopupAvatar();
+      window.form.returnInactiveState();
+      window.cards.map.before(getSuccessMessage());
     });
     evt.preventDefault();
   });
