@@ -7,13 +7,12 @@
   var MAX_MAP_Y = 630;
   var MIN_MAP_Y = 130;
   var half = 2;
-  var adForm = document.querySelector('.ad-form');
   var similarContainerElement = document.querySelector('.map__pins');
 
   // удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
   var addUponActivation = function () {
     window.cards.map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
+    window.form.adForm.classList.remove('ad-form--disabled');
     window.form.removeDisabledAttribute(window.form.formFieldsetElements);
     window.form.removeDisabledAttribute([window.form.formFieldsetHeader]);
     window.form.removeDisabledAttribute(window.form.formSelectElements);
@@ -36,14 +35,14 @@
       addUponActivation();
       window.cards.openPopupAvatar(window.cards.objects);
     } else {
-      var startCoords = window.cards.getTagAddress(mapPin);
+      var startCoords = window.cards.getPinAddress(mapPin);
       var dragged = false;
 
       var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
         dragged = true;
         var bordersX = ['-' + MAIN_PIN_X + 'px', (widghtMap - MAIN_PIN_X) + 'px'];
-        var bordersY = [MIN_MAP_Y + 'px', MAX_MAP_Y + 'px'];
+        var bordersY = [(MIN_MAP_Y - MAIN_PIN_Y) + 'px', (MAX_MAP_Y - MAIN_PIN_Y) + 'px'];
         var shiftCoordsY = startCoords.y - moveEvt.clientY;
         var shiftCoordsX = startCoords.x - moveEvt.clientX;
         var newCoordsY = mapPin.offsetTop - shiftCoordsY + pageYOffset;
@@ -57,24 +56,24 @@
           addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
         if (((newCoordsY + MAIN_PIN_Y) < MIN_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
-          startCoords.y = MIN_MAP_Y - MAIN_PIN_Y;
+          startCoords.y = MIN_MAP_Y - MAIN_PIN_Y / half;
           mapPin.style.top = (MIN_MAP_Y - MAIN_PIN_Y) + 'px';
-          addressInput.setAttribute('value', startCoords.x + ', ' + MIN_MAP_Y);
+          addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + MIN_MAP_Y);
         }
         if (((newCoordsY + MAIN_PIN_Y) > MAX_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
-          startCoords.y = MAX_MAP_Y - MAIN_PIN_Y;
+          startCoords.y = MAX_MAP_Y - MAIN_PIN_Y / half;
           mapPin.style.top = (MAX_MAP_Y - MAIN_PIN_Y) + 'px';
-          addressInput.setAttribute('value', startCoords.x + ', ' + MAX_MAP_Y);
+          addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + MAX_MAP_Y);
         }
         if ((newCoordsX < -MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
           startCoords.x = (window.innerWidth - widghtMap) / half;
           mapPin.style.left = -MAIN_PIN_X + 'px';
-          addressInput.setAttribute('value', 0 + ', ' + startCoords.y);
+          addressInput.setAttribute('value', 0 + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
         if ((newCoordsX > widghtMap - MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
           startCoords.x = (window.innerWidth - widghtMap) / half + widghtMap;
           mapPin.style.left = (widghtMap - MAIN_PIN_X) + 'px';
-          addressInput.setAttribute('value', widghtMap + ', ' + startCoords.y);
+          addressInput.setAttribute('value', widghtMap + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
       };
     }
@@ -105,4 +104,8 @@
       }
     }
   });
+
+  window.map = {
+    half: half
+  };
 })();
