@@ -7,7 +7,11 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
-      onSuccess(xhr.response);
+      if (xhr.status === 200) {
+        onSuccess(xhr.response);
+      } else {
+        window.cards.map.before(window.util.getDescription());
+      }
     });
     xhr.open('POST', URL);
     xhr.send(data);

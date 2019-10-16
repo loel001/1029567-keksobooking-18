@@ -13,6 +13,9 @@
   var timeInSelect = document.querySelector('#timein');
   var timeOutSelect = document.querySelector('#timeout');
   var adForm = document.querySelector('.ad-form');
+  var similarFormError = document.querySelector('#success')
+      .content
+      .querySelector('.success');
 
   window.form = {
     formFieldsetHeader: formFieldsetHeader,
@@ -152,22 +155,51 @@
     window.form.updateTimeOut(timeInSelect, timeOutSelect);
   });
 
-  var similarFormError = document.querySelector('#success')
-      .content
-      .querySelector('.success');
+  // изменение полей формы при успешной отправки
+  var replaceEntryField = function () {
+    window.form.updateTimeOut(timeInSelect, timeOutSelect);
+    priceНousingInput.placeholder = '5000';
+    capacitySelect.querySelector('[value="3"]').removeAttribute('disabled');
+    capacitySelect.querySelector('[value="3"]').setAttribute('selected', '');
+    capacitySelect.querySelector('[value="1"]').removeAttribute('selected');
+    capacitySelect.querySelector('[value="2"]').removeAttribute('selected');
+    capacitySelect.querySelector('[value="0"]').removeAttribute('selected');
+  };
 
+  // сообщение при успешной отправки формы
   var getSuccessMessage = function () {
     var formError = similarFormError.cloneNode(true);
     var messageError = formError.querySelector('.success__message');
     messageError.textContent = 'Ваше объявление\nуспешно размещено!';
+    messageError.style = 'white-space: pre-line';
     return formError;
   };
 
+  // отправка формы
   adForm.addEventListener('submit', function (evt) {
     window.upload(new FormData(adForm), function () {
       window.form.returnInactiveState();
       window.cards.map.before(getSuccessMessage());
+      replaceEntryField();
     });
     evt.preventDefault();
+  });
+
+  // закрытие сообщения после отправления формы
+  window.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.cards.ESC_KEYCODE) {
+      var success = document.querySelector('.success');
+      if (success) {
+        evt.preventDefault();
+        success.remove();
+      }
+    }
+  });
+
+  window.addEventListener('click', function () {
+    var success = document.querySelector('.success');
+    if (success) {
+      success.remove();
+    }
   });
 })();
