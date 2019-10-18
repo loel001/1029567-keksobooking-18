@@ -3,9 +3,6 @@
 
 (function () {
   var URL = 'https://js.dump.academy/keksobooking/data';
-  var similarCardError = document.querySelector('#error')
-      .content
-      .querySelector('.error');
 
   window.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
@@ -14,7 +11,7 @@
       if (xhr.status === 200) {
         onSuccess(xhr.response);
       } else {
-        window.cards.map.before(getDescription());
+        window.cards.map.before(window.util.getDescription());
       }
     });
     xhr.addEventListener('error', function () {
@@ -26,14 +23,5 @@
     xhr.timeout = 10000; // 10s
     xhr.open('GET', URL);
     xhr.send();
-  };
-
-  var getDescription = function () {
-    var cardError = similarCardError.cloneNode(true);
-    var messageError = cardError.querySelector('.error__message');
-    var buttonError = cardError.querySelector('.error__button');
-    messageError.textContent = 'Ошибка загрузки объявления';
-    buttonError.textContent = 'Попробовать снова';
-    return cardError;
   };
 })();
