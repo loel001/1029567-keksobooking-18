@@ -4,7 +4,7 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
-  var NUMBER_OF_OBJECTS = 8;
+  var NUMBER_OF_OBJECTS = 5;
   var map = document.querySelector('.map');
   var widghtMap = map.offsetWidth;
   var similarHousingTemplate = document.querySelector('#pin')
