@@ -24,10 +24,4 @@
     xhr.open('GET', URL);
     xhr.send();
   };
-
-  // var cards = [];
-  // var successHandler = function (data) {
-  //   cards = data;
-  //   window.render(cards);
-  // };
 })();
