@@ -9,7 +9,9 @@
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
-        onSuccess(xhr.response);
+        onSuccess(xhr.response.filter(function (objects) {
+          return objects.offer !== undefined;
+        }));
       } else {
         window.cards.map.before(window.util.getDescription());
       }

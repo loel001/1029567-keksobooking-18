@@ -4,7 +4,6 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
-  var NUMBER_OF_OBJECTS = 5;
   var map = document.querySelector('.map');
   var widghtMap = map.offsetWidth;
   var similarHousingTemplate = document.querySelector('#pin')
@@ -111,7 +110,8 @@
     objects: [],
     getFragment: function (pins) {
       var fragment = document.createDocumentFragment();
-      for (var i = 0; i < NUMBER_OF_OBJECTS; i++) {
+      var numberOfObjects = pins.length > 5 ? 5 : pins.length;
+      for (var i = 0; i < numberOfObjects; i++) {
         fragment.appendChild(getTag(pins[i]));
       }
       return fragment;
