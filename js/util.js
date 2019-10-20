@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var SUCCESS_CODE = 200;
   var mapPin = document.querySelector('.map__pin--main');
   var addressInput = document.querySelector('#address');
   var similarCardError = document.querySelector('#error')
@@ -8,6 +9,7 @@
       .querySelector('.error');
 
   window.util = {
+    SUCCESS_CODE: SUCCESS_CODE,
     mapPin: mapPin,
     addressInput: addressInput,
     getDescription: function () {

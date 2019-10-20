@@ -7,7 +7,7 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === window.util.SUCCESS_CODE) {
         onSuccess(xhr.response);
       } else {
         window.cards.map.before(window.util.getDescription());
