@@ -2,6 +2,10 @@
 // модуль, который работает с формой объявления
 
 (function () {
+  var MAIN_PIN_LEFT = 570;
+  var MAIN_PIN_TOP = 375;
+  var PIN_LEFT_INPUT = 600;
+  var PIN_TOP_INPUT = 407;
   var formFieldsetHeader = document.querySelector('.ad-form-header');
   var formFieldsetElements = document.querySelectorAll('.ad-form__element');
   var formSelectElements = document.querySelectorAll('.map__filter');
@@ -137,8 +141,8 @@
       window.cards.map.classList.add('map--faded');
       window.cards.deletePopupAvatar();
       adForm.reset();
-      window.util.mapPin.style = 'left: ' + 570 + 'px; top: ' + 375 + 'px;';
-      window.util.addressInput.setAttribute('value', 600 + ', ' + 407);
+      window.util.mapPin.style = 'left: ' + MAIN_PIN_LEFT + 'px; top: ' + MAIN_PIN_TOP + 'px;';
+      window.util.addressInput.setAttribute('value', PIN_LEFT_INPUT + ', ' + PIN_TOP_INPUT);
     }
   };
   window.form.addBeforeActivation();

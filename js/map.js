@@ -106,6 +106,7 @@
   });
 
   window.map = {
-    half: half
+    half: half,
+    similarContainerElement: similarContainerElement
   };
 })();
