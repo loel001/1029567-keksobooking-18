@@ -52,4 +52,8 @@
       reader.readAsDataURL(file);
     }
   });
+
+  window.photo = {
+    previewAvatar: previewAvatar
+  };
 })();

@@ -20,6 +20,7 @@
   var similarFormError = document.querySelector('#success')
       .content
       .querySelector('.success');
+  var cleaningForm = document.querySelector('.ad-form__reset');
 
   window.form = {
     formFieldsetHeader: formFieldsetHeader,
@@ -139,10 +140,9 @@
     returnInactiveState: function () {
       adForm.classList.add('ad-form--disabled');
       window.cards.map.classList.add('map--faded');
+      window.form.addBeforeActivation();
       window.cards.deletePopupAvatar();
       adForm.reset();
-      window.util.mapPin.style = 'left: ' + MAIN_PIN_LEFT + 'px; top: ' + MAIN_PIN_TOP + 'px;';
-      window.util.addressInput.setAttribute('value', PIN_LEFT_INPUT + ', ' + PIN_TOP_INPUT);
     }
   };
   window.form.addBeforeActivation();
@@ -161,6 +161,11 @@
 
   // изменение полей формы при успешной отправки
   var replaceEntryField = function () {
+    var photo = document.querySelector('.ad-form__photo img');
+    if (photo) {
+      photo.remove();
+    }
+    window.photo.previewAvatar.src = 'img/muffin-grey.svg';
     window.form.updateTimeOut(timeInSelect, timeOutSelect);
     priceНousingInput.placeholder = '5000';
     capacitySelect.querySelector('[value="3"]').removeAttribute('disabled');
@@ -168,6 +173,8 @@
     capacitySelect.querySelector('[value="1"]').removeAttribute('selected');
     capacitySelect.querySelector('[value="2"]').removeAttribute('selected');
     capacitySelect.querySelector('[value="0"]').removeAttribute('selected');
+    window.util.mapPin.style = 'left: ' + MAIN_PIN_LEFT + 'px; top: ' + MAIN_PIN_TOP + 'px;';
+    window.util.addressInput.setAttribute('value', PIN_LEFT_INPUT + ', ' + PIN_TOP_INPUT);
   };
 
   // сообщение при успешной отправки формы
@@ -205,5 +212,13 @@
     if (success) {
       success.remove();
     }
+  });
+
+  cleaningForm.addEventListener('click', function () {
+    replaceEntryField();
+    timeOutSelect.querySelector('[value="12:00"]').removeAttribute('disabled');
+    timeOutSelect.querySelector('[value="12:00"]').setAttribute('selected', '');
+    timeOutSelect.querySelector('[value="13:00"]').removeAttribute('selected');
+    timeOutSelect.querySelector('[value="14:00"]').removeAttribute('selected');
   });
 })();
