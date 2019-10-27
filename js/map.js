@@ -29,7 +29,7 @@
     var avatars = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var mapPin = window.util.mapPin;
     var addressInput = window.util.addressInput;
-    var widghtMap = window.cards.widghtMap;
+    var widthMap = window.cards.widthMap;
     evt.preventDefault();
     if (avatars.length === 0) {
       addUponActivation();
@@ -41,14 +41,14 @@
       var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
         dragged = true;
-        var bordersX = ['-' + MAIN_PIN_X + 'px', (widghtMap - MAIN_PIN_X) + 'px'];
+        var bordersX = ['-' + MAIN_PIN_X + 'px', (widthMap - MAIN_PIN_X) + 'px'];
         var bordersY = [(MIN_MAP_Y - MAIN_PIN_Y) + 'px', (MAX_MAP_Y - MAIN_PIN_Y) + 'px'];
         var shiftCoordsY = startCoords.y - moveEvt.clientY;
         var shiftCoordsX = startCoords.x - moveEvt.clientX;
         var newCoordsY = mapPin.offsetTop - shiftCoordsY + pageYOffset;
         var newCoordsX = mapPin.offsetLeft - shiftCoordsX + pageXOffset;
         if (((newCoordsY + MAIN_PIN_Y) >= MIN_MAP_Y && (newCoordsY + MAIN_PIN_Y) <= MAX_MAP_Y) &&
-            (newCoordsX >= -MAIN_PIN_X && newCoordsX <= widghtMap - MAIN_PIN_X)) {
+            (newCoordsX >= -MAIN_PIN_X && newCoordsX <= widthMap - MAIN_PIN_X)) {
           startCoords.x = moveEvt.clientX + pageXOffset;
           startCoords.y = moveEvt.clientY + pageYOffset;
           mapPin.style.top = newCoordsY + 'px';
@@ -66,14 +66,14 @@
           addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + MAX_MAP_Y);
         }
         if ((newCoordsX < -MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
-          startCoords.x = (window.innerWidth - widghtMap) / half;
+          startCoords.x = (window.innerWidth - widthMap) / half;
           mapPin.style.left = -MAIN_PIN_X + 'px';
           addressInput.setAttribute('value', 0 + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
-        if ((newCoordsX > widghtMap - MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
-          startCoords.x = (window.innerWidth - widghtMap) / half + widghtMap;
-          mapPin.style.left = (widghtMap - MAIN_PIN_X) + 'px';
-          addressInput.setAttribute('value', widghtMap + ', ' + (newCoordsY + MAIN_PIN_Y));
+        if ((newCoordsX > widthMap - MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
+          startCoords.x = (window.innerWidth - widthMap) / half + widthMap;
+          mapPin.style.left = (widthMap - MAIN_PIN_X) + 'px';
+          addressInput.setAttribute('value', widthMap + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
       };
     }

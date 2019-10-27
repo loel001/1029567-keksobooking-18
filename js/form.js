@@ -167,10 +167,10 @@
     }
     window.photo.previewAvatar.src = 'img/muffin-grey.svg';
     window.form.updateTimeOut(timeInSelect, timeOutSelect);
-    priceНousingInput.placeholder = '5000';
+    priceНousingInput.placeholder = '1000';
     capacitySelect.querySelector('[value="3"]').removeAttribute('disabled');
-    capacitySelect.querySelector('[value="3"]').setAttribute('selected', '');
-    capacitySelect.querySelector('[value="1"]').removeAttribute('selected');
+    capacitySelect.querySelector('[value="3"]').removeAttribute('selected');
+    capacitySelect.querySelector('[value="1"]').setAttribute('selected', '');
     capacitySelect.querySelector('[value="2"]').removeAttribute('selected');
     capacitySelect.querySelector('[value="0"]').removeAttribute('selected');
     window.util.mapPin.style = 'left: ' + MAIN_PIN_LEFT + 'px; top: ' + MAIN_PIN_TOP + 'px;';
