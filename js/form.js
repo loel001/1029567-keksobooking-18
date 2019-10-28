@@ -54,39 +54,39 @@
     // Валидация для количества гостей взависимости от количества комнат
     updateSelect: function (rooms, guests) {
       for (var i = 0; i < guests.options.length; i++) {
-        guests.options[i].setAttribute('disabled', '');
+        guests.options[i].disabled = true;
       }
       switch (rooms.value) {
         case '1':
-          guests.querySelector('[value="1"]').removeAttribute('disabled');
-          guests.querySelector('[value="1"]').setAttribute('selected', '');
-          guests.querySelector('[value="2"]').removeAttribute('selected');
-          guests.querySelector('[value="3"]').removeAttribute('selected');
-          guests.querySelector('[value="0"]').removeAttribute('selected');
+          guests.querySelector('[value="1"]').disabled = false;
+          guests.querySelector('[value="1"]').selected = true;
+          guests.querySelector('[value="2"]').selected = false;
+          guests.querySelector('[value="3"]').selected = false;
+          guests.querySelector('[value="0"]').selected = false;
           break;
         case '2':
-          guests.querySelector('[value="1"]').removeAttribute('disabled');
-          guests.querySelector('[value="2"]').removeAttribute('disabled');
-          guests.querySelector('[value="2"]').setAttribute('selected', '');
-          guests.querySelector('[value="1"]').removeAttribute('selected');
-          guests.querySelector('[value="3"]').removeAttribute('selected');
-          guests.querySelector('[value="0"]').removeAttribute('selected');
+          guests.querySelector('[value="1"]').disabled = false;
+          guests.querySelector('[value="2"]').disabled = false;
+          guests.querySelector('[value="2"]').selected = true;
+          guests.querySelector('[value="1"]').selected = false;
+          guests.querySelector('[value="3"]').selected = false;
+          guests.querySelector('[value="0"]').selected = false;
           break;
         case '3':
-          guests.querySelector('[value="1"]').removeAttribute('disabled');
-          guests.querySelector('[value="2"]').removeAttribute('disabled');
-          guests.querySelector('[value="3"]').removeAttribute('disabled');
-          guests.querySelector('[value="3"]').setAttribute('selected', '');
-          guests.querySelector('[value="1"]').removeAttribute('selected');
-          guests.querySelector('[value="2"]').removeAttribute('selected');
-          guests.querySelector('[value="0"]').removeAttribute('selected');
+          guests.querySelector('[value="1"]').disabled = false;
+          guests.querySelector('[value="2"]').disabled = false;
+          guests.querySelector('[value="3"]').disabled = false;
+          guests.querySelector('[value="3"]').selected = true;
+          guests.querySelector('[value="1"]').selected = false;
+          guests.querySelector('[value="2"]').selected = false;
+          guests.querySelector('[value="0"]').selected = false;
           break;
         case '100':
-          guests.querySelector('[value="0"]').removeAttribute('disabled');
-          guests.querySelector('[value="0"]').setAttribute('selected', '');
-          guests.querySelector('[value="1"]').removeAttribute('selected');
-          guests.querySelector('[value="2"]').removeAttribute('selected');
-          guests.querySelector('[value="3"]').removeAttribute('selected');
+          guests.querySelector('[value="0"]').disabled = false;
+          guests.querySelector('[value="0"]').selected = true;
+          guests.querySelector('[value="1"]').selected = false;
+          guests.querySelector('[value="2"]').selected = false;
+          guests.querySelector('[value="3"]').selected = false;
           break;
       }
     },
@@ -167,11 +167,11 @@
     }
     window.photo.previewAvatar.src = 'img/muffin-grey.svg';
     window.form.updateTimeOut(timeInSelect, timeOutSelect);
-    priceНousingInput.placeholder = '5000';
-    capacitySelect.querySelector('[value="3"]').removeAttribute('disabled');
-    capacitySelect.querySelector('[value="3"]').setAttribute('selected', '');
-    capacitySelect.querySelector('[value="1"]').removeAttribute('selected');
+    priceНousingInput.placeholder = '1000';
+    capacitySelect.querySelector('[value="1"]').removeAttribute('disabled');
+    capacitySelect.querySelector('[value="1"]').setAttribute('selected', '');
     capacitySelect.querySelector('[value="2"]').removeAttribute('selected');
+    capacitySelect.querySelector('[value="3"]').removeAttribute('selected');
     capacitySelect.querySelector('[value="0"]').removeAttribute('selected');
     window.util.mapPin.style = 'left: ' + MAIN_PIN_LEFT + 'px; top: ' + MAIN_PIN_TOP + 'px;';
     window.util.addressInput.setAttribute('value', PIN_LEFT_INPUT + ', ' + PIN_TOP_INPUT);

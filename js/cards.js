@@ -5,7 +5,7 @@
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
   var map = document.querySelector('.map');
-  var widghtMap = map.offsetWidth;
+  var widthMap = map.offsetWidth;
   var similarHousingTemplate = document.querySelector('#pin')
       .content
       .querySelector('.map__pin:not(.map__pin--main)');
@@ -27,7 +27,7 @@
     var fragment = document.createDocumentFragment();
     array.forEach(function (element) {
       var img = document.createElement('img');
-      img.ClassName = 'popup__photo';
+      img.className = 'popup__photo';
       img.src = element;
       img.width = 45;
       img.height = 40;
@@ -45,33 +45,37 @@
     var housingType = cardElement.querySelector('.popup__type');
     var housingCapacity = cardElement.querySelector('.popup__text--capacity');
     var housingTime = cardElement.querySelector('.popup__text--time');
-    var housingFeatures = cardElement.querySelector('.popup__features');
     var housingDescription = cardElement.querySelector('.popup__description');
     var housingPhoto = cardElement.querySelector('.popup__photo');
     var housingAvatar = cardElement.querySelector('.popup__avatar');
+    var housingFeatures = cardElement.querySelectorAll('.popup__feature');
     var getHousingType = function (type) {
-      var result = '';
-      if (type === 'flat') {
-        result = 'Квартира';
+      switch (type) {
+        case 'flat':
+          return 'Квартира';
+        case 'bungalo':
+          return 'Бунгало';
+        case 'house':
+          return 'Дом';
+        case 'palace':
+          return 'Дворец';
+        default:
+          return null;
       }
-      if (type === 'bungalo') {
-        result = 'Бунгало';
-      }
-      if (type === 'house') {
-        result = 'Дом';
-      }
-      if (type === 'palace') {
-        result = 'Дворец';
-      }
-      return result;
     };
+    housingFeatures.forEach(function (item) {
+      var suffix = item.classList[1];
+      var feature = suffix.substring(suffix.indexOf('--') + 2);
+      if (pin.offer.features.indexOf(feature) === -1) {
+        item.remove();
+      }
+    });
     hoisingTitle.textContent = pin.offer.title;
     housingAddress.textContent = pin.offer.address;
     housingPrice.textContent = pin.offer.price + '₽/ночь';
     housingType.textContent = getHousingType(pin.offer.type);
     housingCapacity.textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
     housingTime.textContent = 'заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
-    housingFeatures.textContent = pin.offer.features;
     housingDescription.textContent = pin.offer.description;
     housingPhoto.replaceWith(getPhotoList(pin.offer.photos));
     housingAvatar.src = pin.author.avatar;
@@ -106,7 +110,7 @@
     ESC_KEYCODE: ESC_KEYCODE,
     ENTER_KEYCODE: ENTER_KEYCODE,
     map: map,
-    widghtMap: widghtMap,
+    widthMap: widthMap,
     objects: [],
     getFragment: function (pins) {
       var fragment = document.createDocumentFragment();
@@ -140,7 +144,7 @@
       var pinCenterX = 0;
       var pinCenterY = 0;
       var widtRunner = 12;
-      var offsetPin = (window.innerWidth - widtRunner - widghtMap) / half;
+      var offsetPin = (window.innerWidth - widtRunner - widthMap) / half;
       if (adFormDisabled) {
         pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / half + pageXOffset - offsetPin);
         pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / half + pageYOffset);
