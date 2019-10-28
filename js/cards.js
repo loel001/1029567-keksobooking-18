@@ -45,59 +45,29 @@
     var housingType = cardElement.querySelector('.popup__type');
     var housingCapacity = cardElement.querySelector('.popup__text--capacity');
     var housingTime = cardElement.querySelector('.popup__text--time');
-    var housingFeature = cardElement.querySelector('.popup__features');
     var housingDescription = cardElement.querySelector('.popup__description');
     var housingPhoto = cardElement.querySelector('.popup__photo');
     var housingAvatar = cardElement.querySelector('.popup__avatar');
-    var housinWifi = cardElement.querySelector('.popup__features .popup__feature--wifi');
-    var housinDishwasher = cardElement.querySelector('.popup__feature--dishwasher');
-    var housinParking = cardElement.querySelector('.popup__feature--parking');
-    var housinWasher = cardElement.querySelector('.popup__feature--washer');
-    var housinElevator = cardElement.querySelector('.popup__feature--elevator');
-    var housinConditioner = cardElement.querySelector('.popup__feature--conditioner');
+    var housingFeatures = cardElement.querySelectorAll('.popup__feature');
     var getHousingType = function (type) {
-      var result = '';
-      if (type === 'flat') {
-        result = 'Квартира';
+      switch (type) {
+        case 'flat':
+          return 'Квартира';
+        case 'bungalo':
+          return 'Бунгало';
+        case 'house':
+          return 'Дом';
+        case 'palace':
+          return 'Дворец';
+        default:
+          return null;
       }
-      if (type === 'bungalo') {
-        result = 'Бунгало';
-      }
-      if (type === 'house') {
-        result = 'Дом';
-      }
-      if (type === 'palace') {
-        result = 'Дворец';
-      }
-      return result;
     };
-    var deleteFeatures = function () {
-      var housingFeatures = cardElement.querySelectorAll('.popup__feature');
-      housingFeatures.forEach(function (item) {
+    housingFeatures.forEach(function (item) {
+      var suffix = item.classList[1];
+      var feature = suffix.substring(suffix.indexOf('--') + 2);
+      if (pin.offer.features.indexOf(feature) === -1) {
         item.remove();
-      });
-    };
-    deleteFeatures();
-    pin.offer.features.forEach(function (item) {
-      switch (item) {
-        case 'wifi':
-          housingFeature.append(housinWifi);
-          break;
-        case 'dishwasher':
-          housingFeature.append(housinDishwasher);
-          break;
-        case 'parking':
-          housingFeature.append(housinParking);
-          break;
-        case 'washer':
-          housingFeature.append(housinWasher);
-          break;
-        case 'elevator':
-          housingFeature.append(housinElevator);
-          break;
-        case 'conditioner':
-          housingFeature.append(housinConditioner);
-          break;
       }
     });
     hoisingTitle.textContent = pin.offer.title;
