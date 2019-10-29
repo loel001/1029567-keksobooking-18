@@ -188,11 +188,19 @@
 
   // отправка формы
   adForm.addEventListener('submit', function (evt) {
-    window.upload(new FormData(adForm), function () {
+    // window.upload(new FormData(adForm), function () {
+    //   window.form.returnInactiveState();
+    //   window.cards.map.before(getSuccessMessage());
+    //   replaceEntryField();
+    // });
+    var successHandler =  function () {
       window.form.returnInactiveState();
       window.cards.map.before(getSuccessMessage());
       replaceEntryField();
-    });
+    };
+    var URL = 'https://js.dump.academy/keksobooking';
+    var data = new FormData(adForm);
+    window.dataload(URL, data, 'POST', successHandler, window.cards.errorHandler);
     evt.preventDefault();
   });
 
