@@ -36,11 +36,11 @@
   };
 
   // закрытие сообщения об ошибке после отправления формы
-  window.addEventListener('keydown', function (evt) {
+  document.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.cards.ESC_KEYCODE) {
       var mapFaded = document.querySelector('.map--faded');
       var error = document.querySelector('.error');
-      if ((error !== undefined) && (mapFaded === null)) {
+      if ((error !== null) && (mapFaded === null)) {
         if (error) {
           evt.preventDefault();
           error.remove();
@@ -49,10 +49,10 @@
     }
   });
 
-  window.addEventListener('click', function () {
+  document.addEventListener('click', function () {
     var mapFaded = document.querySelector('.map--faded');
     var error = document.querySelector('.error');
-    if ((error !== undefined) && (mapFaded === null)) {
+    if ((error !== null) && (mapFaded === null)) {
       if (error) {
         error.remove();
       }

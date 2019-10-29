@@ -6,7 +6,6 @@
   var MAIN_PIN_Y = 84;
   var MAX_MAP_Y = 630;
   var MIN_MAP_Y = 130;
-  var half = 2;
   var similarContainerElement = document.querySelector('.map__pins');
 
   // удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
@@ -56,22 +55,22 @@
           addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
         if (((newCoordsY + MAIN_PIN_Y) < MIN_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
-          startCoords.y = MIN_MAP_Y - MAIN_PIN_Y / half;
+          startCoords.y = MIN_MAP_Y - MAIN_PIN_Y / 2;
           mapPin.style.top = (MIN_MAP_Y - MAIN_PIN_Y) + 'px';
           addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + MIN_MAP_Y);
         }
         if (((newCoordsY + MAIN_PIN_Y) > MAX_MAP_Y) && (!bordersY.includes(mapPin.style.top)) && (!bordersX.includes(mapPin.style.left))) {
-          startCoords.y = MAX_MAP_Y - MAIN_PIN_Y / half;
+          startCoords.y = MAX_MAP_Y - MAIN_PIN_Y / 2;
           mapPin.style.top = (MAX_MAP_Y - MAIN_PIN_Y) + 'px';
           addressInput.setAttribute('value', (newCoordsX + MAIN_PIN_X) + ', ' + MAX_MAP_Y);
         }
         if ((newCoordsX < -MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
-          startCoords.x = (window.innerWidth - widthMap) / half;
+          startCoords.x = (window.innerWidth - widthMap) / 2;
           mapPin.style.left = -MAIN_PIN_X + 'px';
           addressInput.setAttribute('value', 0 + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
         if ((newCoordsX > widthMap - MAIN_PIN_X) && (!bordersX.includes(mapPin.style.left)) && (!bordersY.includes(mapPin.style.top))) {
-          startCoords.x = (window.innerWidth - widthMap) / half + widthMap;
+          startCoords.x = (window.innerWidth - widthMap) / 2 + widthMap;
           mapPin.style.left = (widthMap - MAIN_PIN_X) + 'px';
           addressInput.setAttribute('value', widthMap + ', ' + (newCoordsY + MAIN_PIN_Y));
         }
@@ -106,7 +105,7 @@
   });
 
   window.map = {
-    half: half,
+    2: 2,
     similarContainerElement: similarContainerElement
   };
 })();

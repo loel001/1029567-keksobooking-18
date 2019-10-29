@@ -95,7 +95,7 @@
       buttonPopupClose.addEventListener('click', function () {
         popupAvatar.remove();
       });
-      window.addEventListener('keydown', function (evt) {
+      document.addEventListener('keydown', function (evt) {
         if (evt.keyCode === window.cards.ESC_KEYCODE) {
           if (popupAvatar) {
             evt.preventDefault();
@@ -137,19 +137,18 @@
       }
     },
     getTagAddress: function (element) {
-      var half = 2;
       var adFormDisabled = document.querySelector('.ad-form--disabled');
       var pin = element.getBoundingClientRect();
       var pointerHeight = 16;
       var pinCenterX = 0;
       var pinCenterY = 0;
       var widtRunner = 12;
-      var offsetPin = (window.innerWidth - widtRunner - widthMap) / half;
+      var offsetPin = (window.innerWidth - widtRunner - widthMap) / 2;
       if (adFormDisabled) {
-        pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / half + pageXOffset - offsetPin);
-        pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / half + pageYOffset);
+        pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset - offsetPin);
+        pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / 2 + pageYOffset);
       } else {
-        pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / half + pageXOffset - offsetPin);
+        pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset - offsetPin);
         pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) + pointerHeight + pageYOffset);
       }
       return {
@@ -161,9 +160,8 @@
       var pin = element.getBoundingClientRect();
       var pinCenterX = 0;
       var pinCenterY = 0;
-      var half = 2;
-      pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / half + pageXOffset);
-      pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / half + pageYOffset);
+      pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset);
+      pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) / 2 + pageYOffset);
       return {
         x: pinCenterX,
         y: pinCenterY
