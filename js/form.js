@@ -197,7 +197,7 @@
   });
 
   // закрытие сообщения после отправления формы
-  window.addEventListener('keydown', function (evt) {
+  document.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.cards.ESC_KEYCODE) {
       var success = document.querySelector('.success');
       if (success) {
@@ -207,7 +207,7 @@
     }
   });
 
-  window.addEventListener('click', function () {
+  document.addEventListener('click', function () {
     var success = document.querySelector('.success');
     if (success) {
       success.remove();
