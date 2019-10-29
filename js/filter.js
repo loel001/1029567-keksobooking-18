@@ -5,7 +5,7 @@
   var selestHousingPrice = document.querySelector('#housing-price');
   var selestHousingRooms = document.querySelector('#housing-rooms');
   var selestHousingGuests = document.querySelector('#housing-guests');
-  var fieldsetHousingFeatures = document.querySelector('.map__features');
+  var formFilter = document.querySelector('.map__filters');
 
   var getCriteries = function () {
     return {
@@ -17,23 +17,7 @@
     };
   };
 
-  selestHousingType.addEventListener('change', function () {
-    renderPins(getCriteries());
-  });
-
-  selestHousingPrice.addEventListener('change', function () {
-    renderPins(getCriteries());
-  });
-
-  selestHousingRooms.addEventListener('change', function () {
-    renderPins(getCriteries());
-  });
-
-  selestHousingGuests.addEventListener('change', function () {
-    renderPins(getCriteries());
-  });
-
-  fieldsetHousingFeatures.addEventListener('change', function () {
+  formFilter.addEventListener('change', function () {
     renderPins(getCriteries());
   });
 
@@ -84,25 +68,13 @@
       }
     });
     cardsRet = cardsRet.filter(function (object) {
-      if (criteries.rooms === 'any') {
-        return true;
-      } else {
-        return object.offer.rooms === Number(criteries.rooms);
-      }
+      return criteries.rooms === 'any' ? true : object.offer.rooms === Number(criteries.rooms);
     });
     cardsRet = cardsRet.filter(function (object) {
-      if (criteries.guests === 'any') {
-        return true;
-      } else {
-        return object.offer.guests === Number(criteries.guests);
-      }
+      return criteries.guests === 'any' ? true : object.offer.guests === Number(criteries.guests);
     });
     cardsRet = cardsRet.filter(function (object) {
-      if (criteries.features === []) {
-        return true;
-      } else {
-        return getLastCards(object.offer.features, criteries.features);
-      }
+      return criteries.features === [] ? true : getLastCards(object.offer.features, criteries.features);
     });
     return cardsRet;
   };

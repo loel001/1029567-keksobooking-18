@@ -6,6 +6,7 @@
   var MAIN_PIN_Y = 84;
   var MAX_MAP_Y = 630;
   var MIN_MAP_Y = 130;
+  var URL = 'https://js.dump.academy/keksobooking/data';
   var similarContainerElement = document.querySelector('.map__pins');
 
   // удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
@@ -29,10 +30,14 @@
     var mapPin = window.util.mapPin;
     var addressInput = window.util.addressInput;
     var widthMap = window.cards.widthMap;
-    evt.preventDefault();
-    if (avatars.length === 0) {
+    var successHandler = function (photos) {
+      window.cards.objects = photos;
       addUponActivation();
       window.cards.openPopupAvatar(window.cards.objects);
+    };
+    evt.preventDefault();
+    if (avatars.length === 0) {
+      window.load(URL, null, 'GET', successHandler, window.cards.errorHandler);
     } else {
       var startCoords = window.cards.getPinAddress(mapPin);
       var dragged = false;

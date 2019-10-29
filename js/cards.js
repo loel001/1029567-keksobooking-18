@@ -47,8 +47,10 @@
     var housingTime = cardElement.querySelector('.popup__text--time');
     var housingDescription = cardElement.querySelector('.popup__description');
     var housingPhoto = cardElement.querySelector('.popup__photo');
+    var housingPhotoWrap = cardElement.querySelector('.popup__photos');
     var housingAvatar = cardElement.querySelector('.popup__avatar');
     var housingFeatures = cardElement.querySelectorAll('.popup__feature');
+    var housingFeaturesList = cardElement.querySelector('.popup__features');
     var getHousingType = function (type) {
       switch (type) {
         case 'flat':
@@ -63,22 +65,62 @@
           return null;
       }
     };
-    housingFeatures.forEach(function (item) {
-      var suffix = item.classList[1];
-      var feature = suffix.substring(suffix.indexOf('--') + 2);
-      if (pin.offer.features.indexOf(feature) === -1) {
-        item.remove();
-      }
-    });
-    hoisingTitle.textContent = pin.offer.title;
-    housingAddress.textContent = pin.offer.address;
-    housingPrice.textContent = pin.offer.price + '₽/ночь';
-    housingType.textContent = getHousingType(pin.offer.type);
-    housingCapacity.textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
-    housingTime.textContent = 'заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
-    housingDescription.textContent = pin.offer.description;
-    housingPhoto.replaceWith(getPhotoList(pin.offer.photos));
-    housingAvatar.src = pin.author.avatar;
+    if (pin.offer.features.length > 0) {
+      housingFeatures.forEach(function (item) {
+        var suffix = item.classList[1];
+        var feature = suffix.substring(suffix.indexOf('--') + 2);
+        if (pin.offer.features.indexOf(feature) === -1) {
+          item.remove();
+        }
+      });
+    } else {
+      housingFeaturesList.remove();
+    }
+    if (pin.offer.title !== '') {
+      hoisingTitle.textContent = pin.offer.title;
+    } else {
+      hoisingTitle.remove();
+    }
+    if (pin.offer.address !== '') {
+      housingAddress.textContent = pin.offer.address;
+    } else {
+      housingAddress.remove();
+    }
+    if (pin.offer.price > 0) {
+      housingPrice.textContent = pin.offer.price + '₽/ночь';
+    } else {
+      housingPrice.remove();
+    }
+    if (pin.offer.type !== '') {
+      housingType.textContent = getHousingType(pin.offer.type);
+    } else {
+      housingType.remove();
+    }
+    if (pin.offer.rooms > 0 && pin.offer.guests > 0) {
+      housingCapacity.textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
+    } else {
+      housingCapacity.remove();
+    }
+    if (pin.offer.checkin > 0 && pin.offer.checkout > 0) {
+      housingTime.textContent = 'заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
+    } else {
+      housingTime.remove();
+    }
+    if (pin.offer.description !== '') {
+      housingDescription.textContent = pin.offer.description;
+    } else {
+      housingDescription.remove();
+    }
+    if (pin.offer.photos.length > 0) {
+      housingPhoto.replaceWith(getPhotoList(pin.offer.photos));
+    } else {
+      housingPhotoWrap.remove();
+    }
+    if (pin.author.avatar !== '') {
+      housingAvatar.src = pin.author.avatar;
+    } else {
+      housingAvatar.remove();
+    }
     return cardElement;
   };
 
@@ -181,11 +223,4 @@
 
   var coords = window.cards.getTagAddress(window.util.mapPin);
   window.util.addressInput.setAttribute('value', coords.x + ', ' + coords.y);
-
-  var successHandler = function (photos) {
-    window.cards.objects = photos;
-  };
-  var URL = 'https://js.dump.academy/keksobooking/data';
-  window.dataload(URL, null, 'GET', successHandler, window.cards.errorHandler);
-
 })();
