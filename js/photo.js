@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var WIDTH_PHOTO = 70;
+  var HEIGHT_PHOTO = 70;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var fileChooserAvatar = document.querySelector('.ad-form__field input[type=file]');
   var previewAvatar = document.querySelector('.ad-form-header__preview img');
@@ -10,8 +12,8 @@
     var fragment = document.createDocumentFragment();
     var img = document.createElement('img');
     img.src = '';
-    img.width = 70;
-    img.height = 70;
+    img.width = WIDTH_PHOTO;
+    img.height = HEIGHT_PHOTO;
     img.alt = 'Фотография жилья';
     fragment.appendChild(img);
     return fragment;

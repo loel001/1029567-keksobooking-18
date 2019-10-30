@@ -6,49 +6,52 @@
   var MAIN_PIN_TOP = 375;
   var PIN_LEFT_INPUT = 600;
   var PIN_TOP_INPUT = 407;
-  var formFieldsetHeader = document.querySelector('.ad-form-header');
-  var formFieldsetElements = document.querySelectorAll('.ad-form__element');
-  var formSelectElements = document.querySelectorAll('.map__filter');
-  var formFieldsetFeatures = document.querySelector('.map__features');
-  var roomSelect = document.querySelector('#room_number');
-  var capacitySelect = document.querySelector('#capacity');
-  var typeНousingSelect = document.querySelector('#type');
-  var priceНousingInput = document.querySelector('#price');
-  var timeInSelect = document.querySelector('#timein');
-  var timeOutSelect = document.querySelector('#timeout');
-  var adForm = document.querySelector('.ad-form');
-  var similarFormError = document.querySelector('#success')
+  var MIN_PRICE_FLAT = 1000;
+  var MIN_PRICE_HOUSE = 5000;
+  var MIN_PRICE_PALACE = 10000;
+  var ad = document.querySelector('.ad-form');
+  var fieldsetHeader = ad.querySelector('.ad-form-header');
+  var fieldsetElements = ad.querySelectorAll('.ad-form__element');
+  var selectElements = document.querySelectorAll('.map__filter');
+  var fieldsetFeatures = document.querySelector('.map__features');
+  var roomSelect = ad.querySelector('#room_number');
+  var capacitySelect = ad.querySelector('#capacity');
+  var typeНousingSelect = ad.querySelector('#type');
+  var priceНousingInput = ad.querySelector('#price');
+  var timeInSelect = ad.querySelector('#timein');
+  var timeOutSelect = ad.querySelector('#timeout');
+  var cleaning = ad.querySelector('.ad-form__reset');
+  var similarError = document.querySelector('#success')
       .content
       .querySelector('.success');
-  var cleaningForm = document.querySelector('.ad-form__reset');
 
   window.form = {
-    formFieldsetHeader: formFieldsetHeader,
-    formFieldsetElements: formFieldsetElements,
-    formSelectElements: formSelectElements,
-    formFieldsetFeatures: formFieldsetFeatures,
+    ad: ad,
+    fieldsetHeader: fieldsetHeader,
+    fieldsetElements: fieldsetElements,
+    selectElements: selectElements,
+    fieldsetFeatures: fieldsetFeatures,
     roomSelect: roomSelect,
     capacitySelect: capacitySelect,
     typeНousingSelect: typeНousingSelect,
     priceНousingInput: priceНousingInput,
     timeInSelect: timeInSelect,
     timeOutSelect: timeOutSelect,
-    adForm: adForm,
     addDisabledAttribute: function (array) {
-      for (var i = 0; i < array.length; i++) {
-        array[i].setAttribute('disabled', '');
-      }
+      array.forEach(function (element) {
+        element.disabled = true;
+      });
     },
     // Добавление disabled у форм перед активайией
     addBeforeActivation: function () {
-      window.form.addDisabledAttribute(window.form.formFieldsetElements);
-      window.form.addDisabledAttribute([window.form.formFieldsetHeader]);
-      window.form.addDisabledAttribute(window.form.formSelectElements);
-      window.form.addDisabledAttribute([window.form.formFieldsetFeatures]);
+      window.form.addDisabledAttribute(window.form.fieldsetElements);
+      window.form.addDisabledAttribute([window.form.fieldsetHeader]);
+      window.form.addDisabledAttribute(window.form.selectElements);
+      window.form.addDisabledAttribute([window.form.fieldsetFeatures]);
     },
     removeDisabledAttribute: function (array) {
       array.forEach(function (element) {
-        element.removeAttribute('disabled');
+        element.disabled = false;
       });
     },
     // Валидация для количества гостей взависимости от количества комнат
@@ -56,6 +59,9 @@
       for (var i = 0; i < guests.options.length; i++) {
         guests.options[i].disabled = true;
       }
+      // guests.options.forEach(function (element) {
+      //   element.disabled = true;
+      // });
       switch (rooms.value) {
         case '1':
           guests.querySelector('[value="1"]').disabled = false;
@@ -95,54 +101,58 @@
       switch (type.value) {
         case 'bungalo':
           price.placeholder = '0';
-          price.setAttribute('min', 0);
+          price.min = '0';
           break;
         case 'flat':
-          price.placeholder = '1000';
-          price.setAttribute('min', 1000);
+          price.placeholder = MIN_PRICE_FLAT;
+          price.min = MIN_PRICE_FLAT;
           break;
         case 'house':
-          price.placeholder = '5000';
-          price.setAttribute('min', 5000);
+          price.placeholder = MIN_PRICE_HOUSE;
+          price.min = MIN_PRICE_HOUSE;
           break;
         case 'palace':
-          price.placeholder = '10000';
-          price.setAttribute('min', 10000);
+          price.placeholder = MIN_PRICE_PALACE;
+          price.min = MIN_PRICE_PALACE;
           break;
       }
     },
     // Валидация для количества гостей взависимости от количества комнат
     updateTimeOut: function (timein, timeout) {
+      // timeout.options.forEach(function (element) {
+      //   element.disabled = true;
+      // });
       for (var i = 0; i < timeout.options.length; i++) {
         timeout.options[i].setAttribute('disabled', '');
       }
       switch (timein.value) {
         case '12:00':
-          timeout.querySelector('[value="12:00"]').removeAttribute('disabled');
-          timeout.querySelector('[value="12:00"]').setAttribute('selected', '');
-          timeout.querySelector('[value="13:00"]').removeAttribute('selected');
-          timeout.querySelector('[value="14:00"]').removeAttribute('selected');
+          timeout.querySelector('[value="12:00"]').disabled = false;
+          timeout.querySelector('[value="12:00"]').selected = true;
+          timeout.querySelector('[value="13:00"]').selected = false;
+          timeout.querySelector('[value="14:00"]').selected = false;
           break;
         case '13:00':
-          timeout.querySelector('[value="13:00"]').removeAttribute('disabled');
-          timeout.querySelector('[value="13:00"]').setAttribute('selected', '');
-          timeout.querySelector('[value="12:00"]').removeAttribute('selected');
-          timeout.querySelector('[value="14:00"]').removeAttribute('selected');
+          timeout.querySelector('[value="13:00"]').disabled = false;
+          timeout.querySelector('[value="13:00"]').selected = true;
+          timeout.querySelector('[value="12:00"]').selected = false;
+          timeout.querySelector('[value="14:00"]').selected = false;
           break;
         case '14:00':
-          timeout.querySelector('[value="14:00"]').removeAttribute('disabled');
-          timeout.querySelector('[value="14:00"]').setAttribute('selected', '');
-          timeout.querySelector('[value="12:00"]').removeAttribute('selected');
-          timeout.querySelector('[value="13:00"]').removeAttribute('selected');
+          timeout.querySelector('[value="14:00"]').disabled = false;
+          timeout.querySelector('[value="14:00"]').selected = true;
+          timeout.querySelector('[value="12:00"]').selected = false;
+          timeout.querySelector('[value="13:00"]').selected = false;
           break;
       }
     },
     returnInactiveState: function () {
-      adForm.classList.add('ad-form--disabled');
+      ad.classList.add('ad-form--disabled');
       window.cards.map.classList.add('map--faded');
       window.form.addBeforeActivation();
       window.cards.deletePopupAvatar();
-      adForm.reset();
+      ad.reset();
+      window.filter.purification.reset();
     }
   };
   window.form.addBeforeActivation();
@@ -161,40 +171,41 @@
 
   // изменение полей формы при успешной отправки
   var replaceEntryField = function () {
+    var pricePlaceholder = 1000;
     var photo = document.querySelector('.ad-form__photo img');
     if (photo) {
       photo.remove();
     }
     window.photo.previewAvatar.src = 'img/muffin-grey.svg';
     window.form.updateTimeOut(timeInSelect, timeOutSelect);
-    priceНousingInput.placeholder = '1000';
-    capacitySelect.querySelector('[value="1"]').removeAttribute('disabled');
-    capacitySelect.querySelector('[value="1"]').setAttribute('selected', '');
-    capacitySelect.querySelector('[value="2"]').removeAttribute('selected');
-    capacitySelect.querySelector('[value="3"]').removeAttribute('selected');
-    capacitySelect.querySelector('[value="0"]').removeAttribute('selected');
+    priceНousingInput.placeholder = pricePlaceholder;
+    capacitySelect.querySelector('[value="1"]').disabled = false;
+    capacitySelect.querySelector('[value="1"]').selected = true;
+    capacitySelect.querySelector('[value="2"]').selected = false;
+    capacitySelect.querySelector('[value="3"]').selected = false;
+    capacitySelect.querySelector('[value="0"]').selected = false;
     window.util.mapPin.style = 'left: ' + MAIN_PIN_LEFT + 'px; top: ' + MAIN_PIN_TOP + 'px;';
-    window.util.addressInput.setAttribute('value', PIN_LEFT_INPUT + ', ' + PIN_TOP_INPUT);
+    window.util.addressInput.value = PIN_LEFT_INPUT + ', ' + PIN_TOP_INPUT;
   };
 
   // сообщение при успешной отправки формы
   var getSuccessMessage = function () {
-    var formError = similarFormError.cloneNode(true);
-    var messageError = formError.querySelector('.success__message');
+    var error = similarError.cloneNode(true);
+    var messageError = error.querySelector('.success__message');
     messageError.textContent = 'Ваше объявление\nуспешно размещено!';
     messageError.style = 'white-space: pre-line';
-    return formError;
+    return error;
   };
 
   // отправка формы
-  adForm.addEventListener('submit', function (evt) {
+  ad.addEventListener('submit', function (evt) {
     var successHandler = function () {
       window.form.returnInactiveState();
       window.cards.map.before(getSuccessMessage());
       replaceEntryField();
     };
     var URL = 'https://js.dump.academy/keksobooking';
-    var data = new FormData(adForm);
+    var data = new FormData(ad);
     window.load(URL, data, 'POST', successHandler, window.cards.errorHandler);
     evt.preventDefault();
   });
@@ -217,11 +228,12 @@
     }
   });
 
-  cleaningForm.addEventListener('click', function () {
+  cleaning.addEventListener('click', function () {
+    window.form.returnInactiveState();
     replaceEntryField();
-    timeOutSelect.querySelector('[value="12:00"]').removeAttribute('disabled');
-    timeOutSelect.querySelector('[value="12:00"]').setAttribute('selected', '');
-    timeOutSelect.querySelector('[value="13:00"]').removeAttribute('selected');
-    timeOutSelect.querySelector('[value="14:00"]').removeAttribute('selected');
+    timeOutSelect.querySelector('[value="12:00"]').disabled = false;
+    timeOutSelect.querySelector('[value="12:00"]').selected = true;
+    timeOutSelect.querySelector('[value="13:00"]').selected = false;
+    timeOutSelect.querySelector('[value="14:00"]').selected = false;
   });
 })();

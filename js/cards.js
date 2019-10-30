@@ -4,6 +4,9 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var WIDTH_IMG = 45;
+  var HEIGHT_IMG = 40;
+  var NUMBER_OF_CARDS = 5;
   var map = document.querySelector('.map');
   var widthMap = map.offsetWidth;
   var similarHousingTemplate = document.querySelector('#pin')
@@ -29,8 +32,8 @@
       var img = document.createElement('img');
       img.className = 'popup__photo';
       img.src = element;
-      img.width = 45;
-      img.height = 40;
+      img.width = WIDTH_IMG;
+      img.height = HEIGHT_IMG;
       img.alt = 'Фотография жилья';
       fragment.appendChild(img);
     });
@@ -76,6 +79,7 @@
     } else {
       housingFeaturesList.remove();
     }
+    // pin.offer.title !== '' ? hoisingTitle.textContent = pin.offer.title : hoisingTitle.remove();
     if (pin.offer.title !== '') {
       hoisingTitle.textContent = pin.offer.title;
     } else {
@@ -127,10 +131,13 @@
   // Для открытия и закрытия попапа по клику на аватарку
   var callObject = function (obj, i) {
     return function () {
-      var popups = document.querySelectorAll('.popup:not(.map__pin--main)');
-      for (var j = 0; j < popups.length; j++) {
-        popups[j].remove();
-      }
+      var popups = map.querySelectorAll('.popup:not(.map__pin--main)');
+      // for (var j = 0; j < popups.length; j++) {
+      //   popups[j].remove();
+      // }
+      popups.forEach(function (element) {
+        element.remove();
+      });
       similarFiltersTemplate.before(getDescription(obj[i]));
       var buttonPopupClose = document.querySelector('.popup__close');
       var popupAvatar = document.querySelector('.popup');
@@ -156,7 +163,7 @@
     objects: [],
     getFragment: function (pins) {
       var fragment = document.createDocumentFragment();
-      var numberOfObjects = pins.length > 5 ? 5 : pins.length;
+      var numberOfObjects = pins.length > NUMBER_OF_CARDS ? NUMBER_OF_CARDS : pins.length;
       for (var i = 0; i < numberOfObjects; i++) {
         fragment.appendChild(getTag(pins[i]));
       }

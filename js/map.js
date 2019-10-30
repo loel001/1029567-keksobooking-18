@@ -7,22 +7,22 @@
   var MAX_MAP_Y = 630;
   var MIN_MAP_Y = 130;
   var URL = 'https://js.dump.academy/keksobooking/data';
-  var similarContainerElement = document.querySelector('.map__pins');
+  var containerElement = document.querySelector('.map__pins');
 
   // удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
   var addUponActivation = function () {
     window.cards.map.classList.remove('map--faded');
-    window.form.adForm.classList.remove('ad-form--disabled');
-    window.form.removeDisabledAttribute(window.form.formFieldsetElements);
-    window.form.removeDisabledAttribute([window.form.formFieldsetHeader]);
-    window.form.removeDisabledAttribute(window.form.formSelectElements);
-    window.form.removeDisabledAttribute([window.form.formFieldsetFeatures]);
+    window.form.ad.classList.remove('ad-form--disabled');
+    window.form.removeDisabledAttribute(window.form.fieldsetElements);
+    window.form.removeDisabledAttribute([window.form.fieldsetHeader]);
+    window.form.removeDisabledAttribute(window.form.selectElements);
+    window.form.removeDisabledAttribute([window.form.fieldsetFeatures]);
     var pinCoords = window.cards.getTagAddress(window.util.mapPin);
     window.util.addressInput.setAttribute('value', pinCoords.x + ', ' + pinCoords.y);
     window.form.updateSelect(window.form.roomSelect, window.form.capacitySelect);
     window.form.updatePrice(window.form.typeНousingSelect, window.form.priceНousingInput);
     window.form.updateTimeOut(window.form.timeInSelect, window.form.timeOutSelect);
-    similarContainerElement.appendChild(window.cards.getFragment(window.cards.objects));
+    containerElement.appendChild(window.cards.getFragment(window.cards.objects));
   };
 
   window.util.mapPin.addEventListener('mousedown', function (evt) {
@@ -111,6 +111,6 @@
 
   window.map = {
     2: 2,
-    similarContainerElement: similarContainerElement
+    containerElement: containerElement
   };
 })();

@@ -1,23 +1,25 @@
 'use strict';
 
 (function () {
-  var selestHousingType = document.querySelector('#housing-type');
-  var selestHousingPrice = document.querySelector('#housing-price');
-  var selestHousingRooms = document.querySelector('#housing-rooms');
-  var selestHousingGuests = document.querySelector('#housing-guests');
-  var formFilter = document.querySelector('.map__filters');
+  var MIN_PRICE = 10000;
+  var MAX_PRICE = 50000;
+  var selectHousingType = document.querySelector('#housing-type');
+  var selectHousingPrice = document.querySelector('#housing-price');
+  var selectHousingRooms = document.querySelector('#housing-rooms');
+  var selectHousingGuests = document.querySelector('#housing-guests');
+  var purification = document.querySelector('.map__filters');
 
   var getCriteries = function () {
     return {
-      type: selestHousingType.options[selestHousingType.selectedIndex].value,
-      price: selestHousingPrice.options[selestHousingPrice.selectedIndex].value,
-      rooms: selestHousingRooms.options[selestHousingRooms.selectedIndex].value,
-      guests: selestHousingGuests.options[selestHousingGuests.selectedIndex].value,
+      type: selectHousingType.options[selectHousingType.selectedIndex].value,
+      price: selectHousingPrice.options[selectHousingPrice.selectedIndex].value,
+      rooms: selectHousingRooms.options[selectHousingRooms.selectedIndex].value,
+      guests: selectHousingGuests.options[selectHousingGuests.selectedIndex].value,
       features: getNewFeatures()
     };
   };
 
-  formFilter.addEventListener('change', function () {
+  purification.addEventListener('change', function () {
     renderPins(getCriteries());
   });
 
@@ -33,7 +35,7 @@
   var renderPins = window.debounce(function (criteries) {
     window.cards.deletePopupAvatar();
     var cards = filterCards(criteries);
-    window.map.similarContainerElement.appendChild(window.cards.getFragment(cards));
+    window.map.containerElement.appendChild(window.cards.getFragment(cards));
     window.cards.openPopupAvatar(cards);
   });
 
@@ -58,11 +60,11 @@
     cardsRet = cardsRet.filter(function (object) {
       switch (criteries.price) {
         case 'middle':
-          return object.offer.price >= 10000 && object.offer.price <= 50000;
+          return object.offer.price >= MIN_PRICE && object.offer.price <= MAX_PRICE;
         case 'low':
-          return object.offer.price < 10000;
+          return object.offer.price < MIN_PRICE;
         case 'high':
-          return object.offer.price > 50000;
+          return object.offer.price > MAX_PRICE;
         default:
           return true;
       }
@@ -77,5 +79,9 @@
       return criteries.features === [] ? true : getLastCards(object.offer.features, criteries.features);
     });
     return cardsRet;
+  };
+
+  window.filter = {
+    purification: purification
   };
 })();
