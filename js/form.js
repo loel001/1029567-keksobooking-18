@@ -56,12 +56,10 @@
     },
     // Валидация для количества гостей взависимости от количества комнат
     updateSelect: function (rooms, guests) {
-      for (var i = 0; i < guests.options.length; i++) {
-        guests.options[i].disabled = true;
-      }
-      // guests.options.forEach(function (element) {
-      //   element.disabled = true;
-      // });
+      var capacityOptions = ad.querySelectorAll('#capacity option');
+      capacityOptions.forEach(function (element) {
+        element.disabled = true;
+      });
       switch (rooms.value) {
         case '1':
           guests.querySelector('[value="1"]').disabled = false;
@@ -119,12 +117,13 @@
     },
     // Валидация для количества гостей взависимости от количества комнат
     updateTimeOut: function (timein, timeout) {
-      // timeout.options.forEach(function (element) {
-      //   element.disabled = true;
+      var timeOptions = ad.querySelectorAll('#timeout option');
+      timeOptions.forEach(function (element) {
+        element.disabled = true;
+      });
+      // timeOptions.forEach(function (element) {
+      //   element.value
       // });
-      for (var i = 0; i < timeout.options.length; i++) {
-        timeout.options[i].setAttribute('disabled', '');
-      }
       switch (timein.value) {
         case '12:00':
           timeout.querySelector('[value="12:00"]').disabled = false;

@@ -79,7 +79,6 @@
     } else {
       housingFeaturesList.remove();
     }
-    // pin.offer.title !== '' ? hoisingTitle.textContent = pin.offer.title : hoisingTitle.remove();
     if (pin.offer.title !== '') {
       hoisingTitle.textContent = pin.offer.title;
     } else {
@@ -132,9 +131,6 @@
   var callObject = function (obj, i) {
     return function () {
       var popups = map.querySelectorAll('.popup:not(.map__pin--main)');
-      // for (var j = 0; j < popups.length; j++) {
-      //   popups[j].remove();
-      // }
       popups.forEach(function (element) {
         element.remove();
       });
@@ -171,19 +167,19 @@
     },
     openPopupAvatar: function (obj) {
       var avatarPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-      for (var i = 0; i < avatarPins.length; i++) {
-        avatarPins[i].addEventListener('click', callObject(obj, i));
-      }
+      avatarPins.forEach(function (element, index) {
+        element.addEventListener('click', callObject(obj, index));
+      });
     },
     deletePopupAvatar: function () {
       var avatarPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
       var popupAvatar = document.querySelector('.popup');
-      for (var i = 0; i < avatarPins.length; i++) {
-        avatarPins[i].parentNode.removeChild(avatarPins[i]);
+      avatarPins.forEach(function (element) {
+        element.parentNode.removeChild(element);
         if (popupAvatar) {
           popupAvatar.remove();
         }
-      }
+      });
     },
     getTagAddress: function (element) {
       var adFormDisabled = document.querySelector('.ad-form--disabled');
