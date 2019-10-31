@@ -69,7 +69,7 @@
           return null;
       }
     };
-    var fillcard = function (elementOffer, elementHTML) {
+    var fillСard = function (elementOffer, elementHTML) {
       if (elementOffer !== '') {
         elementHTML.textContent = elementOffer;
         cardElement.appendChild(elementHTML);
@@ -82,8 +82,8 @@
       cardElement.appendChild(housingAvatar);
     }
     cardElement.appendChild(housingButton);
-    fillcard(pin.offer.title, hoisingTitle);
-    fillcard(pin.offer.address, housingAddress);
+    fillСard(pin.offer.title, hoisingTitle);
+    fillСard(pin.offer.address, housingAddress);
     if (pin.offer.price > 0) {
       housingPrice.textContent = pin.offer.price + '₽/ночь';
       cardElement.appendChild(housingPrice);
@@ -112,7 +112,7 @@
       });
       cardElement.appendChild(housingFeaturesList);
     }
-    fillcard(pin.offer.description, housingDescription);
+    fillСard(pin.offer.description, housingDescription);
     if (pin.offer.photos.length > 0) {
       housingPhoto.replaceWith(getPhotoList(pin.offer.photos));
       cardElement.appendChild(housingPhotoWrap);

@@ -7,7 +7,7 @@
   var MAX_MAP_Y = 630;
   var MIN_MAP_Y = 130;
   var URL = 'https://js.dump.academy/keksobooking/data';
-  var containerElement = document.querySelector('.map__pins');
+  var similarContainer = document.querySelector('.map__pins');
 
   // удаление disabled у форм, появляются пины с аватарками, смена адреса пина(красного)
   var addUponActivation = function () {
@@ -21,7 +21,7 @@
     window.util.addressInput.setAttribute('value', pinCoords.x + ', ' + pinCoords.y);
     window.form.updateSelect(window.form.roomSelect, window.form.capacitySelect);
     window.form.updatePrice(window.form.typeНousingSelect, window.form.priceНousingInput);
-    containerElement.appendChild(window.cards.getFragment(window.cards.objects));
+    similarContainer.appendChild(window.cards.getFragment(window.cards.objects));
   };
 
   window.util.mapPin.addEventListener('mousedown', function (evt) {
@@ -109,7 +109,6 @@
   });
 
   window.map = {
-    2: 2,
-    containerElement: containerElement
+    similarContainer: similarContainer
   };
 })();

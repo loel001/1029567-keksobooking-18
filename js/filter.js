@@ -11,10 +11,10 @@
 
   var getCriteries = function () {
     return {
-      type: selectHousingType.options[selectHousingType.selectedIndex].value,
-      price: selectHousingPrice.options[selectHousingPrice.selectedIndex].value,
-      rooms: selectHousingRooms.options[selectHousingRooms.selectedIndex].value,
-      guests: selectHousingGuests.options[selectHousingGuests.selectedIndex].value,
+      type: selectHousingType.value,
+      price: selectHousingPrice.value,
+      rooms: selectHousingRooms.value,
+      guests: selectHousingGuests.value,
       features: getNewFeatures()
     };
   };
@@ -35,7 +35,7 @@
   var renderPins = window.debounce(function (criteries) {
     window.cards.deletePopupAvatar();
     var cards = filterCards(criteries);
-    window.map.containerElement.appendChild(window.cards.getFragment(cards));
+    window.map.similarContainer.appendChild(window.cards.getFragment(cards));
     window.cards.openPopupAvatar(cards);
   });
 
@@ -48,37 +48,28 @@
     return true;
   };
 
-  var filterCards = function (criteries) {
-    var cardsRet = [];
-    if (criteries.type === 'any') {
-      cardsRet = window.cards.objects;
-    } else {
-      cardsRet = window.cards.objects.filter(function (object) {
-        return object.offer.type === criteries.type;
-      });
+  var qualingPrice = function (element) {
+    switch (selectHousingPrice.value) {
+      case 'middle':
+        return element.offer.price >= MIN_PRICE && element.offer.price <= MAX_PRICE;
+      case 'low':
+        return element.offer.price < MIN_PRICE;
+      case 'high':
+        return element.offer.price > MAX_PRICE;
+      default:
+        return true;
     }
-    cardsRet = cardsRet.filter(function (object) {
-      switch (criteries.price) {
-        case 'middle':
-          return object.offer.price >= MIN_PRICE && object.offer.price <= MAX_PRICE;
-        case 'low':
-          return object.offer.price < MIN_PRICE;
-        case 'high':
-          return object.offer.price > MAX_PRICE;
-        default:
-          return true;
-      }
+  };
+
+  var filterCards = function (criteries) {
+    return window.cards.objects.filter(function (elem) {
+      var isTypeEqual = criteries.type === 'any' ? true : elem.offer.type === criteries.type;
+      var isPriceQual = qualingPrice(elem);
+      var isRoomEqual = criteries.rooms === 'any' ? true : elem.offer.rooms === Number(criteries.rooms);
+      var isGuestEqual = criteries.guests === 'any' ? true : elem.offer.guests === Number(criteries.guests);
+      var isFeaturesEqual = criteries.features === [] ? true : getLastCards(elem.offer.features, criteries.features);
+      return isTypeEqual && isPriceQual && isRoomEqual && isGuestEqual && isFeaturesEqual;
     });
-    cardsRet = cardsRet.filter(function (object) {
-      return criteries.rooms === 'any' ? true : object.offer.rooms === Number(criteries.rooms);
-    });
-    cardsRet = cardsRet.filter(function (object) {
-      return criteries.guests === 'any' ? true : object.offer.guests === Number(criteries.guests);
-    });
-    cardsRet = cardsRet.filter(function (object) {
-      return criteries.features === [] ? true : getLastCards(object.offer.features, criteries.features);
-    });
-    return cardsRet;
   };
 
   window.filter = {
