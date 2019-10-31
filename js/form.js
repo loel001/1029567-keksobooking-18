@@ -12,8 +12,8 @@
   var ad = document.querySelector('.ad-form');
   var fieldsetHeader = ad.querySelector('.ad-form-header');
   var fieldsetElements = ad.querySelectorAll('.ad-form__element');
-  var selectElements = document.querySelectorAll('.map__filter');
-  var fieldsetFeatures = document.querySelector('.map__features');
+  var selectElements = window.filter.purification.querySelectorAll('.map__filter');
+  var fieldsetFeatures = window.filter.purification.querySelector('.map__features');
   var roomSelect = ad.querySelector('#room_number');
   var capacitySelect = ad.querySelector('#capacity');
   var typeНousingSelect = ad.querySelector('#type');
@@ -115,36 +115,6 @@
           break;
       }
     },
-    // Валидация для количества гостей взависимости от количества комнат
-    updateTimeOut: function (timein, timeout) {
-      var timeOptions = ad.querySelectorAll('#timeout option');
-      timeOptions.forEach(function (element) {
-        element.disabled = true;
-      });
-      // timeOptions.forEach(function (element) {
-      //   element.value
-      // });
-      switch (timein.value) {
-        case '12:00':
-          timeout.querySelector('[value="12:00"]').disabled = false;
-          timeout.querySelector('[value="12:00"]').selected = true;
-          timeout.querySelector('[value="13:00"]').selected = false;
-          timeout.querySelector('[value="14:00"]').selected = false;
-          break;
-        case '13:00':
-          timeout.querySelector('[value="13:00"]').disabled = false;
-          timeout.querySelector('[value="13:00"]').selected = true;
-          timeout.querySelector('[value="12:00"]').selected = false;
-          timeout.querySelector('[value="14:00"]').selected = false;
-          break;
-        case '14:00':
-          timeout.querySelector('[value="14:00"]').disabled = false;
-          timeout.querySelector('[value="14:00"]').selected = true;
-          timeout.querySelector('[value="12:00"]').selected = false;
-          timeout.querySelector('[value="13:00"]').selected = false;
-          break;
-      }
-    },
     returnInactiveState: function () {
       ad.classList.add('ad-form--disabled');
       window.cards.map.classList.add('map--faded');
@@ -164,8 +134,12 @@
     window.form.updatePrice(typeНousingSelect, priceНousingInput);
   });
 
+  timeOutSelect.addEventListener('change', function () {
+    timeInSelect.value = timeOutSelect.value;
+  });
+
   timeInSelect.addEventListener('change', function () {
-    window.form.updateTimeOut(timeInSelect, timeOutSelect);
+    timeOutSelect.value = timeInSelect.value;
   });
 
   // изменение полей формы при успешной отправки
@@ -176,7 +150,6 @@
       photo.remove();
     }
     window.photo.previewAvatar.src = 'img/muffin-grey.svg';
-    window.form.updateTimeOut(timeInSelect, timeOutSelect);
     priceНousingInput.placeholder = pricePlaceholder;
     capacitySelect.querySelector('[value="1"]').disabled = false;
     capacitySelect.querySelector('[value="1"]').selected = true;

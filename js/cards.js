@@ -42,6 +42,7 @@
 
   var getDescription = function (pin) {
     var cardElement = similarCardTemplate.cloneNode(true);
+    var housingButton = cardElement.querySelector('.popup__close');
     var hoisingTitle = cardElement.querySelector('.popup__title');
     var housingAddress = cardElement.querySelector('.popup__text--address');
     var housingPrice = cardElement.querySelector('.popup__text--price');
@@ -68,61 +69,53 @@
           return null;
       }
     };
+    var fillcard = function (elementOffer, elementHTML) {
+      if (elementOffer !== '') {
+        elementHTML.textContent = elementOffer;
+        cardElement.appendChild(elementHTML);
+      }
+      return cardElement;
+    };
+    cardElement.innerHTML = '';
+    if (pin.author.avatar !== '') {
+      housingAvatar.src = pin.author.avatar;
+      cardElement.appendChild(housingAvatar);
+    }
+    cardElement.appendChild(housingButton);
+    fillcard(pin.offer.title, hoisingTitle);
+    fillcard(pin.offer.address, housingAddress);
+    if (pin.offer.price > 0) {
+      housingPrice.textContent = pin.offer.price + '₽/ночь';
+      cardElement.appendChild(housingPrice);
+    }
+    if (pin.offer.type !== '') {
+      housingType.textContent = getHousingType(pin.offer.type);
+      cardElement.appendChild(housingType);
+    }
+    if (pin.offer.rooms > 0 && pin.offer.guests > 0) {
+      housingCapacity.textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
+      cardElement.appendChild(housingCapacity);
+    }
+    if (pin.offer.checkin !== '' && pin.offer.checkout !== '') {
+      housingTime.textContent = 'заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
+      cardElement.appendChild(housingTime);
+    }
     if (pin.offer.features.length > 0) {
       housingFeatures.forEach(function (item) {
         var suffix = item.classList[1];
         var feature = suffix.substring(suffix.indexOf('--') + 2);
         if (pin.offer.features.indexOf(feature) === -1) {
           item.remove();
+        } else {
+          housingFeaturesList.appendChild(item);
         }
       });
-    } else {
-      housingFeaturesList.remove();
+      cardElement.appendChild(housingFeaturesList);
     }
-    if (pin.offer.title !== '') {
-      hoisingTitle.textContent = pin.offer.title;
-    } else {
-      hoisingTitle.remove();
-    }
-    if (pin.offer.address !== '') {
-      housingAddress.textContent = pin.offer.address;
-    } else {
-      housingAddress.remove();
-    }
-    if (pin.offer.price > 0) {
-      housingPrice.textContent = pin.offer.price + '₽/ночь';
-    } else {
-      housingPrice.remove();
-    }
-    if (pin.offer.type !== '') {
-      housingType.textContent = getHousingType(pin.offer.type);
-    } else {
-      housingType.remove();
-    }
-    if (pin.offer.rooms > 0 && pin.offer.guests > 0) {
-      housingCapacity.textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
-    } else {
-      housingCapacity.remove();
-    }
-    if (pin.offer.checkin > 0 && pin.offer.checkout > 0) {
-      housingTime.textContent = 'заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
-    } else {
-      housingTime.remove();
-    }
-    if (pin.offer.description !== '') {
-      housingDescription.textContent = pin.offer.description;
-    } else {
-      housingDescription.remove();
-    }
+    fillcard(pin.offer.description, housingDescription);
     if (pin.offer.photos.length > 0) {
       housingPhoto.replaceWith(getPhotoList(pin.offer.photos));
-    } else {
-      housingPhotoWrap.remove();
-    }
-    if (pin.author.avatar !== '') {
-      housingAvatar.src = pin.author.avatar;
-    } else {
-      housingAvatar.remove();
+      cardElement.appendChild(housingPhotoWrap);
     }
     return cardElement;
   };

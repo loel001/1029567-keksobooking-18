@@ -3,11 +3,11 @@
 (function () {
   var MIN_PRICE = 10000;
   var MAX_PRICE = 50000;
-  var selectHousingType = document.querySelector('#housing-type');
-  var selectHousingPrice = document.querySelector('#housing-price');
-  var selectHousingRooms = document.querySelector('#housing-rooms');
-  var selectHousingGuests = document.querySelector('#housing-guests');
-  var purification = document.querySelector('.map__filters');
+  var selectHousingType = window.cards.map.querySelector('#housing-type');
+  var selectHousingPrice = window.cards.map.querySelector('#housing-price');
+  var selectHousingRooms = window.cards.map.querySelector('#housing-rooms');
+  var selectHousingGuests = window.cards.map.querySelector('#housing-guests');
+  var purification = window.cards.map.querySelector('.map__filters');
 
   var getCriteries = function () {
     return {
@@ -25,7 +25,7 @@
 
   var getNewFeatures = function () {
     var newFeaterus = [];
-    var inputsFeatures = document.querySelectorAll('.map__features input:checked');
+    var inputsFeatures = window.cards.map.querySelectorAll('.map__features input:checked');
     inputsFeatures.forEach(function (elem) {
       newFeaterus.push(elem.value);
     });

@@ -3,10 +3,10 @@
   var WIDTH_PHOTO = 70;
   var HEIGHT_PHOTO = 70;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  var fileChooserAvatar = document.querySelector('.ad-form__field input[type=file]');
-  var previewAvatar = document.querySelector('.ad-form-header__preview img');
-  var fileChooserPhoto = document.querySelector('.ad-form__upload input[type=file]');
-  var previewPhoto = document.querySelector('.ad-form__photo');
+  var fileChooserAvatar = window.form.ad.querySelector('.ad-form__field input[type=file]');
+  var previewAvatar = window.form.ad.querySelector('.ad-form-header__preview img');
+  var fileChooserPhoto = window.form.ad.querySelector('.ad-form__upload input[type=file]');
+  var previewPhoto = window.form.ad.querySelector('.ad-form__photo');
 
   var getPhoto = function () {
     var fragment = document.createDocumentFragment();

@@ -21,7 +21,6 @@
     window.util.addressInput.setAttribute('value', pinCoords.x + ', ' + pinCoords.y);
     window.form.updateSelect(window.form.roomSelect, window.form.capacitySelect);
     window.form.updatePrice(window.form.typeНousingSelect, window.form.priceНousingInput);
-    window.form.updateTimeOut(window.form.timeInSelect, window.form.timeOutSelect);
     containerElement.appendChild(window.cards.getFragment(window.cards.objects));
   };
 
