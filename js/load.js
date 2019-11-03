@@ -18,7 +18,7 @@
             break;
         }
       } else {
-        window.cards.map.before(window.util.getDescription());
+        window.cards.map.before(window.util.getDescriptionError());
       }
     });
     xhr.addEventListener('error', function () {

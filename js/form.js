@@ -16,6 +16,7 @@
   var fieldsetFeatures = window.filter.purification.querySelector('.map__features');
   var roomSelect = ad.querySelector('#room_number');
   var capacitySelect = ad.querySelector('#capacity');
+  var capacityOptions = ad.querySelectorAll('#capacity option');
   var typeНousingSelect = ad.querySelector('#type');
   var priceНousingInput = ad.querySelector('#price');
   var timeInSelect = ad.querySelector('#timein');
@@ -24,6 +25,12 @@
   var similarError = document.querySelector('#success')
       .content
       .querySelector('.success');
+  var guestList = {
+    1: [1],
+    2: [2, 1],
+    3: [3, 2, 1],
+    100: [0]
+  };
 
   window.form = {
     ad: ad,
@@ -31,8 +38,6 @@
     fieldsetElements: fieldsetElements,
     selectElements: selectElements,
     fieldsetFeatures: fieldsetFeatures,
-    roomSelect: roomSelect,
-    capacitySelect: capacitySelect,
     typeНousingSelect: typeНousingSelect,
     priceНousingInput: priceНousingInput,
     timeInSelect: timeInSelect,
@@ -55,44 +60,14 @@
       });
     },
     // Валидация для количества гостей взависимости от количества комнат
-    updateSelect: function (rooms, guests) {
-      var capacityOptions = ad.querySelectorAll('#capacity option');
+    updateSelect: function () {
+      var result = '';
       capacityOptions.forEach(function (element) {
-        element.disabled = true;
+        if (guestList[roomSelect.value].indexOf(+element.value) > -1) {
+          result += element.outerHTML;
+        }
       });
-      switch (rooms.value) {
-        case '1':
-          guests.querySelector('[value="1"]').disabled = false;
-          guests.querySelector('[value="1"]').selected = true;
-          guests.querySelector('[value="2"]').selected = false;
-          guests.querySelector('[value="3"]').selected = false;
-          guests.querySelector('[value="0"]').selected = false;
-          break;
-        case '2':
-          guests.querySelector('[value="1"]').disabled = false;
-          guests.querySelector('[value="2"]').disabled = false;
-          guests.querySelector('[value="2"]').selected = true;
-          guests.querySelector('[value="1"]').selected = false;
-          guests.querySelector('[value="3"]').selected = false;
-          guests.querySelector('[value="0"]').selected = false;
-          break;
-        case '3':
-          guests.querySelector('[value="1"]').disabled = false;
-          guests.querySelector('[value="2"]').disabled = false;
-          guests.querySelector('[value="3"]').disabled = false;
-          guests.querySelector('[value="3"]').selected = true;
-          guests.querySelector('[value="1"]').selected = false;
-          guests.querySelector('[value="2"]').selected = false;
-          guests.querySelector('[value="0"]').selected = false;
-          break;
-        case '100':
-          guests.querySelector('[value="0"]').disabled = false;
-          guests.querySelector('[value="0"]').selected = true;
-          guests.querySelector('[value="1"]').selected = false;
-          guests.querySelector('[value="2"]').selected = false;
-          guests.querySelector('[value="3"]').selected = false;
-          break;
-      }
+      capacitySelect.innerHTML = result;
     },
     // Валидация для цены за ночь взависимости от типа жилья
     updatePrice: function (type, price) {
@@ -126,8 +101,10 @@
   };
   window.form.addBeforeActivation();
 
+  window.form.updateSelect();
+
   roomSelect.addEventListener('change', function () {
-    window.form.updateSelect(roomSelect, capacitySelect);
+    window.form.updateSelect();
   });
 
   typeНousingSelect.addEventListener('change', function () {
@@ -151,11 +128,7 @@
     }
     window.photo.previewAvatar.src = 'img/muffin-grey.svg';
     priceНousingInput.placeholder = pricePlaceholder;
-    capacitySelect.querySelector('[value="1"]').disabled = false;
-    capacitySelect.querySelector('[value="1"]').selected = true;
-    capacitySelect.querySelector('[value="2"]').selected = false;
-    capacitySelect.querySelector('[value="3"]').selected = false;
-    capacitySelect.querySelector('[value="0"]').selected = false;
+    window.form.updateSelect();
     window.util.mapPin.style = 'left: ' + MAIN_PIN_LEFT + 'px; top: ' + MAIN_PIN_TOP + 'px;';
     window.util.addressInput.value = PIN_LEFT_INPUT + ', ' + PIN_TOP_INPUT;
   };
@@ -203,9 +176,5 @@
   cleaning.addEventListener('click', function () {
     window.form.returnInactiveState();
     replaceEntryField();
-    timeOutSelect.querySelector('[value="12:00"]').disabled = false;
-    timeOutSelect.querySelector('[value="12:00"]').selected = true;
-    timeOutSelect.querySelector('[value="13:00"]').selected = false;
-    timeOutSelect.querySelector('[value="14:00"]').selected = false;
   });
 })();

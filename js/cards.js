@@ -130,17 +130,20 @@
       similarFiltersTemplate.before(getDescription(obj[i]));
       var buttonPopupClose = document.querySelector('.popup__close');
       var popupAvatar = document.querySelector('.popup');
-      buttonPopupClose.addEventListener('click', function () {
-        popupAvatar.remove();
-      });
-      document.addEventListener('keydown', function (evt) {
+      var onKeydownEsc = function (evt) {
         if (evt.keyCode === window.cards.ESC_KEYCODE) {
           if (popupAvatar) {
             evt.preventDefault();
             popupAvatar.remove();
           }
         }
+        document.removeEventListener('keydown', onKeydownEsc);
+      };
+      buttonPopupClose.addEventListener('click', function (evt) {
+        evt.preventDefault();
+        popupAvatar.remove();
       });
+      document.addEventListener('keydown', onKeydownEsc);
     };
   };
 
@@ -189,6 +192,8 @@
         pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset - offsetPin);
         pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) + pointerHeight + pageYOffset);
       }
+      // pinCenterX = Math.floor(pin.left + (pin.right - pin.left) / 2 + pageXOffset - offsetPin);
+      // pinCenterY = Math.floor(pin.top + (pin.bottom - pin.top) + pointerHeight + pageYOffset);
       return {
         x: pinCenterX,
         y: pinCenterY

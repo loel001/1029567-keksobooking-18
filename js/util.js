@@ -12,50 +12,32 @@
     SUCCESS_CODE: SUCCESS_CODE,
     mapPin: mapPin,
     addressInput: addressInput,
-    getDescription: function () {
+    getDescriptionError: function () {
       var cardError = similarCardError.cloneNode(true);
       var messageError = cardError.querySelector('.error__message');
       var buttonError = cardError.querySelector('.error__button');
-      var error = document.querySelector('.error');
-      var mapFaded = document.querySelector('.map--faded');
+      var onShowError = function (evt) {
+        if ((evt.type === 'click') || (evt.keyCode === window.cards.ESC_KEYCODE)) {
+          var error = document.querySelector('.error');
+          var mapFaded = document.querySelector('.map--faded');
+          if ((error !== null) && (mapFaded === null)) {
+            if (error) {
+              evt.preventDefault();
+              error.remove();
+            }
+          } else {
+            evt.preventDefault();
+            document.location.reload(true);
+          }
+        }
+        document.removeEventListener('keydown', onShowError);
+        document.removeEventListener('click', onShowError);
+      };
       messageError.textContent = 'Ошибка загрузки объявления';
       buttonError.textContent = 'Попробовать снова';
-      buttonError.addEventListener('click', function (evt) {
-        if ((error !== undefined) && (mapFaded === null)) {
-          if (error) {
-            evt.preventDefault();
-            error.remove();
-          }
-        } else {
-          evt.preventDefault();
-          document.location.reload(true);
-        }
-      });
+      document.addEventListener('keydown', onShowError);
+      document.addEventListener('click', onShowError);
       return cardError;
     }
   };
-
-  // закрытие сообщения об ошибке после отправления формы
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.cards.ESC_KEYCODE) {
-      var mapFaded = document.querySelector('.map--faded');
-      var error = document.querySelector('.error');
-      if ((error !== null) && (mapFaded === null)) {
-        if (error) {
-          evt.preventDefault();
-          error.remove();
-        }
-      }
-    }
-  });
-
-  document.addEventListener('click', function () {
-    var mapFaded = document.querySelector('.map--faded');
-    var error = document.querySelector('.error');
-    if ((error !== null) && (mapFaded === null)) {
-      if (error) {
-        error.remove();
-      }
-    }
-  });
 })();
