@@ -4,7 +4,7 @@
 (function () {
   var MAIN_PIN_LEFT = 570;
   var MAIN_PIN_TOP = 375;
-  var PIN_LEFT_INPUT = 600;
+  var PIN_LEFT_INPUT = 602;
   var PIN_TOP_INPUT = 407;
   var MIN_PRICE_FLAT = 1000;
   var MIN_PRICE_HOUSE = 5000;
