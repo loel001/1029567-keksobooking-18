@@ -2,7 +2,7 @@
 // модуль, который управляет карточками объявлений и пинами: добавляет на страницу нужную карточку, отрисовывает пины и осуществляет взаимодействие карточки и метки на карте;
 
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/data';
+  var URL = 'https://javascript.pages.academy/keksobooking/data';
   var MAIN_PIN_X = 32;
   var MAIN_PIN_Y = 81;
   var MAX_MAP_Y = 630;

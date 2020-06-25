@@ -149,7 +149,7 @@
       window.cards.map.before(getSuccessMessage());
       replaceEntryField();
     };
-    var URL = 'https://js.dump.academy/keksobooking';
+    var URL = 'https://javascript.pages.academy/keksobooking';
     var data = new FormData(ad);
     window.load(URL, data, 'POST', successHandler, window.cards.errorHandler);
     evt.preventDefault();

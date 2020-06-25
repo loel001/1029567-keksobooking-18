@@ -8,12 +8,12 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === window.util.SUCCESS_CODE) {
         switch (url) {
-          case 'https://js.dump.academy/keksobooking/data':
+          case 'https://javascript.pages.academy/keksobooking/data':
             onSuccess(xhr.response.filter(function (objects) {
               return objects.offer !== undefined;
             }));
             break;
-          case 'https://js.dump.academy/keksobooking':
+          case 'https://javascript.pages.academy/keksobooking':
             onSuccess(xhr.response);
             break;
         }
